@@ -1,0 +1,8 @@
+.projectBoxesContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.projectBox {
+  width: 50%;
+}

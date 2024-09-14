@@ -15,7 +15,7 @@ const ProjectBox = () => {
           nous déconnectons de la réalité, que les réseaux sociaux nous rendent
           plus asociaux que sociaux.
         </div>
-        <div className={styles.creationDate}>Créé il y'a 2 mois</div>
+        <div className={styles.creationDate}>Posté il y'a 2 mois</div>
       </CardContent>
     </Card>
   );
