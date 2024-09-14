@@ -1,0 +1,26 @@
+.container {
+  cursor: pointer;
+  margin: 1rem;
+}
+
+.topicsRow {
+  margin: 0 0 1rem 0;
+}
+
+.topicChip {
+  margin: 0 0.5rem 0 0;
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 600rem;
+  margin: 0 0 1rem 0;
+}
+
+.description {
+  margin: 0 0 1rem 0;
+}
+
+.creationDate {
+  font-size: 0.8rem;
+}

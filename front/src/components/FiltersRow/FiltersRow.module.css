@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1rem 1rem 2rem;
+}
+
+.filterBtn {
+  margin: 0 2rem 0 0;
+}
+
+.btnText {
+  margin: 0 0 0 0.5rem;
+  font-size: 1rem;
+}
