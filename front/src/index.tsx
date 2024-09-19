@@ -1,30 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import ProjectsList from "./pages/ProjectsList/ProjectsList";
-import { ProjectDetail } from "./pages/ProjectDetail/ProjectDetail";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import Auth from "./pages/Auth/Auth";
-
-const router = createBrowserRouter([
-  {
-    path: "project-details/:id",
-    element: <ProjectDetail />,
-  },
-  {
-    path: "/login",
-    element: <Auth mode="login" />,
-  },
-  {
-    path: "/sign-up ",
-    element: <Auth mode="signUp" />,
-  },
-  {
-    path: "/",
-    element: <ProjectsList />,
-  },
-]);
+import App from "./Router";
+import { store } from "./redux/store";
+import { Provider } from "react-redux";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -32,8 +12,10 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <GoogleOAuthProvider clientId="64170857284-2lvdbtgele6jkol12l7p1q5jsqo8r4c4.apps.googleusercontent.com">
-      <RouterProvider router={router} />
-    </GoogleOAuthProvider>
+    <Provider store={store}>
+      <GoogleOAuthProvider clientId="64170857284-2lvdbtgele6jkol12l7p1q5jsqo8r4c4.apps.googleusercontent.com">
+        <App />
+      </GoogleOAuthProvider>
+    </Provider>
   </React.StrictMode>
 );

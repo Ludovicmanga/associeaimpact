@@ -1,32 +1,40 @@
 import { Button, Divider, TextField } from "@mui/material";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  accessProfileApiCall,
   loginWithGoogleApiCall,
   loginWithLocal,
-} from "../../helpers/auth";
+  logoutApiCall,
+} from "../../helpers/auth.helper";
+import { useAppDispatch } from "../../redux/hooks";
+import { setUser } from "../../redux/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const Auth = (props: { mode: "login" | "signUp" }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     if (props.mode === "login" && email.length > 0 && password.length > 0) {
-      await loginWithLocal(email, password);
+      const res = await loginWithLocal(email, password);
+      dispatch(setUser(res));
     }
-  };
-
-  const accessProfile = async () => {
-    await accessProfileApiCall();
   };
 
   const handleLoginWithGoogle = async (
     credentialResponse: CredentialResponse
   ) => {
     if (credentialResponse.credential) {
-      await loginWithGoogleApiCall(credentialResponse.credential);
+      const res = await loginWithGoogleApiCall(credentialResponse.credential);
+      dispatch(setUser(res));
     }
+  };
+
+  const handleLogout = async () => {
+    const res = await logoutApiCall();
+    dispatch(setUser(null));
   };
 
   return (
@@ -46,7 +54,7 @@ const Auth = (props: { mode: "login" | "signUp" }) => {
       <Button onClick={handleSubmit}>
         {props.mode === "login" ? "Se connecter" : "S'inscrire"}
       </Button>
-      <Button onClick={accessProfile}>Profile</Button>
+      <Button onClick={handleLogout}>Se déconnecter</Button>
       <Divider />
       <div>Ou</div>
       <GoogleLogin
