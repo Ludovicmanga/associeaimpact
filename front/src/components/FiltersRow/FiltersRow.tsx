@@ -5,7 +5,7 @@ import {
   TextField,
 } from "@mui/material";
 import styles from "./FiltersRow.module.css";
-import { FilterList, Search, SwapVert } from "@mui/icons-material";
+import { Add, FilterList, Search, SwapVert } from "@mui/icons-material";
 import { useState } from "react";
 
 export const FiltersRow = () => {
@@ -13,36 +13,44 @@ export const FiltersRow = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.filterBtn}>
-        <IconButton>
-          <FilterList />
-          <div className={styles.btnText}>Filtrer</div>
-        </IconButton>
-      </div>
-      <div className={styles.filterBtn}>
-        <IconButton className={styles.filterBtn}>
-          <SwapVert />
-          <div className={styles.btnText}>Trier</div>
-        </IconButton>
-      </div>
-      {searchBtnIsClicked ? (
-        <OutlinedInput
-          size="small"
-          className={styles.filterBtn}
-          startAdornment={
-            <InputAdornment position="start">
-              <Search />
-            </InputAdornment>
-          }
-        />
-      ) : (
+      <div className={styles.filterBtnContainer}>
         <div className={styles.filterBtn}>
-          <IconButton onClick={() => setSearchBtnIsClicked(true)}>
-            <Search />
-            <div className={styles.btnText}>Rechercher</div>
+          <IconButton>
+            <FilterList />
+            <div className={styles.btnText}>Filtrer</div>
           </IconButton>
         </div>
-      )}
+        <div className={styles.filterBtn}>
+          <IconButton className={styles.filterBtn}>
+            <SwapVert />
+            <div className={styles.btnText}>Trier</div>
+          </IconButton>
+        </div>
+        {searchBtnIsClicked ? (
+          <OutlinedInput
+            size="small"
+            className={styles.filterBtn}
+            startAdornment={
+              <InputAdornment position="start">
+                <Search />
+              </InputAdornment>
+            }
+          />
+        ) : (
+          <div className={styles.filterBtn}>
+            <IconButton onClick={() => setSearchBtnIsClicked(true)}>
+              <Search />
+              <div className={styles.btnText}>Rechercher</div>
+            </IconButton>
+          </div>
+        )}
+      </div>
+      <div className={styles.filterBtn}>
+        <IconButton>
+          <Add />
+          <div className={styles.btnText}>Créer un projet</div>
+        </IconButton>
+      </div>
     </div>
   );
 };

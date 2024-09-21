@@ -1,0 +1,92 @@
+.container {
+  display: flex;
+}
+
+.sidebarContainer {
+  width: 17%;
+}
+
+.mainContent {
+  width: 83%;
+}
+
+.top {
+  display: flex;
+  justify-content: start;
+  margin: 1rem 0 2rem 0;
+  padding: 0 0 0 5rem;
+}
+
+.title {
+  font-size: 2.5rem;
+}
+
+.postDate {
+  color: #495057;
+  font-size: 0.8rem;
+}
+
+.cardsSectionContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.cardsSectionContainerLeft,
+.cardsSectionContainerRight {
+  width: 45%;
+}
+
+.contentCard {
+  margin: 1rem;
+  padding: 1.3rem;
+  min-height: 6rem;
+}
+
+.projectDescriptionCard {
+  max-height: 25rem;
+  overflow: scroll;
+}
+
+.projectNeedsCard {
+  max-height: 30rem;
+  overflow: scroll;
+}
+
+.cardTitle {
+  display: flex;
+  margin: 0 0 2rem 0;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.cardTitleText {
+  margin: 0 0 0 0.5rem;
+}
+
+.projetFounderAttribute {
+  margin: 2rem 0 0 0;
+}
+
+.projetFounderAttributeName {
+  font-weight: 600;
+  margin: 0 0 0.3rem 0;
+}
+
+.contactBtnContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2.6rem 0 1.3rem 0;
+}
+
+.contactBtnIcon {
+  margin: 0 0.7rem 0 0;
+}
+
+.projectDescriptionTextContainer {
+  padding: 0.5rem;
+}
+
+.openPositionsCardContainer {
+  margin: 1rem 0;
+}

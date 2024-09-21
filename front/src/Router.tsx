@@ -22,7 +22,7 @@ const routesWhenLoggedIn = createBrowserRouter([
     element: <Auth mode="login" />,
   },
   {
-    path: "/sign-up ",
+    path: "/sign-up",
     element: <Auth mode="signUp" />,
   },
   {
