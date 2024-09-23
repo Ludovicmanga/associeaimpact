@@ -1,9 +1,9 @@
-import { ListItemButton, Paper } from "@mui/material";
+import { Drawer, ListItemButton, Paper } from "@mui/material";
 import styles from "./Sidebar.module.css";
 import { AutoGraph, Email, Person } from "@mui/icons-material";
 import Lottie from "lottie-react";
 import pinkProject from "../../images/pinkProject.json";
-import { FaRegLightbulb } from "react-icons/fa";
+import { FaRegHandshake, FaRegLightbulb } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const SideBar = () => {
@@ -13,7 +13,20 @@ const SideBar = () => {
     navigate("/");
   };
   return (
-    <Paper className={styles.container} elevation={10}>
+    <Drawer
+      open={true}
+      className={styles.container}
+      elevation={10}
+      sx={{
+        width: "17%",
+        flexShrink: 0,
+        "& .MuiDrawer-paper": {
+          width: "17%",
+          boxSizing: "border-box",
+        },
+      }}
+      variant="permanent"
+    >
       <div className={styles.logoContainer} onClick={handleNavigateHome}>
         <div>
           <Lottie
@@ -26,11 +39,19 @@ const SideBar = () => {
       </div>
       <div className={styles.pagesListContainer}>
         <div className={styles.listItemBtn}>
-          <ListItemButton>
+          <ListItemButton onClick={handleNavigateHome}>
             <div className={styles.listItemIcon}>
               <FaRegLightbulb size={18} />
             </div>
-            <div className={styles.listText}>Les projets</div>
+            <div className={styles.listText}>Tous les projets</div>
+          </ListItemButton>
+        </div>
+        <div className={styles.listItemBtn}>
+          <ListItemButton>
+            <div className={styles.listItemIcon}>
+              <FaRegHandshake size={21} />
+            </div>
+            <div className={styles.listText}>Mes projets</div>
           </ListItemButton>
         </div>
         <div className={styles.listItemBtn}>
@@ -42,7 +63,7 @@ const SideBar = () => {
           </ListItemButton>
         </div>
       </div>
-    </Paper>
+    </Drawer>
   );
 };
 

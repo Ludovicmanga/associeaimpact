@@ -11,7 +11,7 @@ import GoogleMapReact from "google-map-react";
 import { IoPerson } from "react-icons/io5";
 import { PiPlugsConnectedBold, PiSpeakerHighLight } from "react-icons/pi";
 import { FaRegLightbulb } from "react-icons/fa";
-import { FaMessage, FaRegMessage } from "react-icons/fa6";
+import { FaHandFist, FaMessage, FaRegMessage } from "react-icons/fa6";
 import OpenPositionsCard from "../../components/openPositionsCard/openPositionsCard";
 
 export const ProjectDetail = () => {
@@ -72,7 +72,11 @@ export const ProjectDetail = () => {
         <div className={styles.cardsSectionContainer}>
           <div className={styles.cardsSectionContainerLeft}>
             <Card
-              className={`${styles.contentCard} ${styles.projectDescriptionCard}`}
+              className={styles.contentCard}
+              sx={{
+                overflow: "scroll",
+                maxHeight: "25rem",
+              }}
             >
               <div className={styles.cardTitle}>
                 <div className={styles.cardTitleIcon}>
@@ -127,6 +131,67 @@ export const ProjectDetail = () => {
                 />
               </div>
             </Card>
+            <Card
+              className={styles.contentCard}
+              sx={{
+                overflow: "scroll",
+                maxHeight: "25rem",
+              }}
+            >
+              <div className={styles.cardTitle}>
+                <div className={styles.cardTitleIcon}>
+                  <FaHandFist size={18} />
+                </div>
+                <div className={styles.cardTitleText}>Les enjeux du projet</div>
+              </div>
+              <div className={styles.projectDescriptionTextContainer}>
+                <Chip
+                  label="Décarbonner l'économie"
+                  sx={{
+                    background: "#fff0f6",
+                  }}
+                  className={styles.stakeChip}
+                />
+                <Chip
+                  label="Rendre leur pouvoir aux agriculteurs"
+                  sx={{
+                    background: "#f8f0fc",
+                    margin: "1rem",
+                  }}
+                  className={styles.stakeChip}
+                />
+                <Chip
+                  label="Décarbonner l'économie"
+                  sx={{
+                    background: "#f3f0ff",
+                  }}
+                  className={styles.stakeChip}
+                />
+                <Chip
+                  label="Rendre leur pouvoir aux agriculteurs"
+                  sx={{
+                    background: "#edf2ff",
+                    margin: "1rem",
+                  }}
+                  className={styles.stakeChip}
+                />
+                <Chip
+                  label="Décarbonner l'économie"
+                  sx={{
+                    background: "#e7f5ff",
+                  }}
+                  className={styles.stakeChip}
+                />
+                <Chip
+                  label="Rendre leur pouvoir aux agriculteurs"
+                  sx={{
+                    background: "#e3fafc",
+                    margin: "1rem",
+                  }}
+                  className={styles.stakeChip}
+                />
+              </div>
+            </Card>
           </div>
           <div className={styles.cardsSectionContainerRight}>
             <Card className={styles.contentCard}>
@@ -173,7 +238,11 @@ export const ProjectDetail = () => {
               </div>
             </Card>
             <Card
-              className={`${styles.contentCard} ${styles.projectNeedsCard}`}
+              className={styles.contentCard}
+              sx={{
+                overflow: "scroll",
+                maxHeight: "25rem",
+              }}
             >
               <div className={styles.cardTitle}>
                 <div className={styles.cardTitleIcon}>

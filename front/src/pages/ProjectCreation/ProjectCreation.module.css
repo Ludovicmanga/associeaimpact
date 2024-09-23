@@ -1,0 +1,43 @@
+.container {
+  display: flex;
+}
+
+.sidebarContainer {
+  width: 17%;
+}
+
+.mainContentWithNavBar {
+  width: 83%;
+}
+
+.mainContent {
+  padding: 2rem 10rem 3.3rem 10rem;
+}
+
+.questionContainer {
+  margin: 1.5rem;
+}
+
+.questionTitle {
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+
+.projectStateItem {
+  display: flex;
+  align-items: center;
+}
+
+.projectStateItemText {
+  margin: 0 0 0 0.6rem;
+}
+
+.cofounderChip {
+  margin: 0.3rem;
+}
+
+.submitBtnContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -42,16 +42,6 @@
   min-height: 6rem;
 }
 
-.projectDescriptionCard {
-  max-height: 25rem;
-  overflow: scroll;
-}
-
-.projectNeedsCard {
-  max-height: 30rem;
-  overflow: scroll;
-}
-
 .cardTitle {
   display: flex;
   margin: 0 0 2rem 0;
@@ -89,4 +79,8 @@
 
 .openPositionsCardContainer {
   margin: 1rem 0;
+}
+
+.stakeChip {
+  margin: 0.3rem;
 }

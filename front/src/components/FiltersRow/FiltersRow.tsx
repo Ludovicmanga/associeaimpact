@@ -7,9 +7,15 @@ import {
 import styles from "./FiltersRow.module.css";
 import { Add, FilterList, Search, SwapVert } from "@mui/icons-material";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const FiltersRow = () => {
   const [searchBtnIsClicked, setSearchBtnIsClicked] = useState(false);
+  const navigate = useNavigate();
+
+  const handleGoToCreationPage = () => {
+    navigate("/create-project");
+  };
 
   return (
     <div className={styles.container}>
@@ -46,7 +52,7 @@ export const FiltersRow = () => {
         )}
       </div>
       <div className={styles.filterBtn}>
-        <IconButton>
+        <IconButton onClick={handleGoToCreationPage}>
           <Add />
           <div className={styles.btnText}>Créer un projet</div>
         </IconButton>
