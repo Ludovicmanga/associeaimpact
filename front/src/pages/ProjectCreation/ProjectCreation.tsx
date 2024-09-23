@@ -11,14 +11,21 @@ import {
 import NavBar from "../../components/NavBar/NavBar";
 import SideBar from "../../components/SideBar/SideBar";
 import styles from "./ProjectCreation.module.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaClock, FaFire, FaRegQuestionCircle } from "react-icons/fa";
 import { Add } from "@mui/icons-material";
 import AddPartnerModal from "../../components/AddPartnerModal/AddPartnerModal";
+import { createProjectApiCall } from "../../helpers/projects.helper";
+import { ProjectState } from "../../types/types";
 
 const ProjectCreation = () => {
-  const [projectState, setProjectState] = useState("idea");
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [founderRole, setFounderRole] = useState("");
+  const [state, setProjectState] = useState<ProjectState>(ProjectState.idea);
   const [addPartnerModalOpen, setAddPartnerModalOpen] = useState(false);
+  const [stakes, setStakes] = useState<string[]>([]);
+  const [place, setPlace] = useState("");
 
   const [partnersList, setPartnersList] = useState<
     {
@@ -27,6 +34,18 @@ const ProjectCreation = () => {
       description: string;
     }[]
   >([]);
+
+  const handleCreateProject = async () => {
+    const projectCreated = createProjectApiCall({
+      name,
+      state,
+      stakes,
+      founderRole,
+      description,
+      place,
+      partnersWanted: partnersList,
+    });
+  };
 
   return (
     <div className={styles.container}>
@@ -38,7 +57,12 @@ const ProjectCreation = () => {
         <div className={styles.mainContent}>
           <div className={styles.questionContainer}>
             <div className={styles.questionTitle}>Nom du projet</div>
-            <TextField placeholder="Ex: Carbone 4" fullWidth />
+            <TextField
+              placeholder="Ex: Carbone 4"
+              fullWidth
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
           </div>
           <div className={styles.questionContainer}>
             <div className={styles.questionTitle}>Description du projet</div>
@@ -47,6 +71,8 @@ const ProjectCreation = () => {
               placeholder="Ex: Carbone 4 est une entreprise de conseil en énergie et décarbonation"
               fullWidth
               minRows={5}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
           </div>
           <div className={styles.questionContainer}>
@@ -55,23 +81,27 @@ const ProjectCreation = () => {
               disablePortal
               options={["Paris", "Londres", "Monaco"]}
               renderInput={(params) => <TextField {...params} />}
+              value={place}
+              onChange={(e, value) => setPlace(value!)}
             />
           </div>
           <div className={styles.questionContainer}>
             <div className={styles.questionTitle}>Etat du projet</div>
             <FormControl fullWidth>
               <Select
-                value={projectState}
+                value={state}
                 label="Age"
-                onChange={(e) => setProjectState(e.target.value)}
+                onChange={(e) =>
+                  setProjectState(e.target.value as ProjectState)
+                }
               >
-                <MenuItem value="idea">
+                <MenuItem value={ProjectState.idea}>
                   <div className={styles.projectStateItem}>
                     <FaRegQuestionCircle color="#f59f00" />
                     <div className={styles.projectStateItemText}>Idée</div>
                   </div>
                 </MenuItem>
-                <MenuItem value="launched">
+                <MenuItem value={ProjectState.recentlyLaunched}>
                   <div className={styles.projectStateItem}>
                     <FaClock color="#f59f00" />
                     <div className={styles.projectStateItemText}>
@@ -79,7 +109,7 @@ const ProjectCreation = () => {
                     </div>
                   </div>
                 </MenuItem>
-                <MenuItem value="success">
+                <MenuItem value={ProjectState.commercialSuccess}>
                   <div className={styles.projectStateItem}>
                     <FaFire color="#f59f00" />
                     <div className={styles.projectStateItemText}>
@@ -94,7 +124,12 @@ const ProjectCreation = () => {
             <div className={styles.questionTitle}>
               Votre poste dans l'entreprise
             </div>
-            <TextField placeholder="Ex: CEO" fullWidth />
+            <TextField
+              value={founderRole}
+              onChange={(e) => setFounderRole(e.target.value)}
+              placeholder="Ex: CEO"
+              fullWidth
+            />
           </div>
           <div className={styles.questionContainer}>
             <div className={styles.questionTitle}>Enjeux traités</div>
@@ -103,6 +138,8 @@ const ProjectCreation = () => {
               options={["Agriculture", "Energie", "Social"]}
               renderInput={(params) => <TextField {...params} />}
               multiple
+              onChange={(e, values) => setStakes(values)}
+              value={stakes}
             />
           </div>
           <div className={styles.questionContainer}>
@@ -131,6 +168,7 @@ const ProjectCreation = () => {
           </div>
           <div className={styles.submitBtnContainer}>
             <Fab
+              onClick={handleCreateProject}
               color="primary"
               size="large"
               variant="extended"
