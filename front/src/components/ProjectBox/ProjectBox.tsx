@@ -7,8 +7,20 @@ const ProjectBox = () => {
       <CardContent>
         <div className={styles.title}>Kantaro</div>
         <div className={styles.topicsRow}>
-          <Chip label="Agriculture" className={styles.topicChip} />
-          <Chip label="Energie" className={styles.topicChip} />
+          <Chip
+            label="Agriculture"
+            className={styles.topicChip}
+            sx={{
+              background: "#e6fcf5",
+            }}
+          />
+          <Chip
+            label="Energie"
+            className={styles.topicChip}
+            sx={{
+              background: "#edf2ff",
+            }}
+          />
         </div>
         <div className={styles.description}>
           Si toi aussi, tu trouves que nous sommes tellement connectées que nous

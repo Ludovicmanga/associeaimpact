@@ -1,3 +1,15 @@
+.container {
+  display: flex;
+}
+
+.sidebarContainer {
+  width: 17%;
+}
+
+.mainContent {
+  width: 83%;
+}
+
 .projectBoxesContainer {
   display: flex;
   flex-wrap: wrap;

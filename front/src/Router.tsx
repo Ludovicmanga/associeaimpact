@@ -11,6 +11,7 @@ import { checkAuthApiCall } from "./helpers/auth.helper";
 import { Skeleton } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { setUser } from "./redux/userSlice";
+import ProjectCreation from "./pages/ProjectCreation/ProjectCreation";
 
 const routesWhenLoggedIn = createBrowserRouter([
   {
@@ -22,8 +23,12 @@ const routesWhenLoggedIn = createBrowserRouter([
     element: <Auth mode="login" />,
   },
   {
-    path: "/sign-up ",
+    path: "/sign-up",
     element: <Auth mode="signUp" />,
+  },
+  {
+    path: "/create-project",
+    element: <ProjectCreation />,
   },
   {
     path: "/",

@@ -1,0 +1,37 @@
+.container {
+  padding: 1rem 0.5rem;
+  height: 100vh;
+}
+
+.logoContainer {
+  display: flex;
+  padding: 1rem;
+  cursor: pointer;
+}
+
+.logoText {
+  margin: 0 0 0 0.6rem;
+  font-weight: 600;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.pagesListContainer {
+  margin: 0 0 0 0;
+}
+
+.listItemBtn {
+  display: flex;
+  align-items: center;
+  margin: 1.2rem 0;
+}
+
+.listItemIcon {
+  display: flex;
+  align-items: center;
+}
+
+.listText {
+  margin: 0 0 0 1rem;
+}
