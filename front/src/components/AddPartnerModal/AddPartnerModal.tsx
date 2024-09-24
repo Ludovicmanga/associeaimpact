@@ -22,7 +22,7 @@ export default function AddPartnerModal(props: {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onClose: () => void;
-  setPartnersList: React.Dispatch<
+  setPartnersWanted: React.Dispatch<
     React.SetStateAction<
       {
         id: string;
@@ -44,7 +44,7 @@ export default function AddPartnerModal(props: {
   ) => setDescription(e.target.value);
 
   const handleAddPartner = () => {
-    props.setPartnersList((curr) => [
+    props.setPartnersWanted((curr) => [
       ...curr,
       {
         id: uuidv4(),

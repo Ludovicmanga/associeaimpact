@@ -1,15 +1,12 @@
 import { Card } from "@mui/material";
 import styles from "./openPositionsCard.module.css";
 
-const OpenPositionsCard = () => {
+const OpenPositionsCard = (props: { role: string; description: string }) => {
   return (
     <Card className={styles.container}>
-      <div className={styles.title}>CFO</div>
+      <div className={styles.title}>{props.role}</div>
       <div className={styles.sectionTitle}>Description du poste</div>
-      <div>
-        Je recherche quelqu'un qui serait bon en marketing, et puisse m'aider
-        sur le développement de mon site web.
-      </div>
+      <div>{props.description}</div>
       <div className={styles.sectionTitle}>Rémunération</div>
       <div>Actions & salaire</div>
     </Card>

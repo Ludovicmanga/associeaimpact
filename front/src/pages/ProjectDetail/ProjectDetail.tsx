@@ -9,12 +9,54 @@ import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
 import GoogleMapReact from "google-map-react";
 import { IoPerson } from "react-icons/io5";
-import { PiPlugsConnectedBold, PiSpeakerHighLight } from "react-icons/pi";
+import { PiSpeakerHighLight } from "react-icons/pi";
 import { FaRegLightbulb } from "react-icons/fa";
 import { FaHandFist, FaMessage, FaRegMessage } from "react-icons/fa6";
 import OpenPositionsCard from "../../components/openPositionsCard/openPositionsCard";
+import { useEffect, useState } from "react";
+import { getOneProjectApiCall } from "../../helpers/projects.helper";
 
 export const ProjectDetail = () => {
+  const params = useParams();
+  const [isLoading, setIsLoading] = useState(true);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [state, setState] = useState("");
+  const [place, setPlace] = useState("");
+  const [stakes, setStakes] = useState<string[]>([]);
+  const [partnersWanted, setPartnersWanted] = useState<
+    {
+      id: string;
+      role: string;
+      description: string;
+    }[]
+  >([]);
+  const [founder, setFounder] = useState<
+    {
+      name: string;
+      entrepreneurialExperience: string;
+    }[]
+  >([]);
+
+  const handleGetOneProject = async (id: number) => {
+    const res = await getOneProjectApiCall(id);
+    if (res) {
+      setDescription(res.description);
+      setName(res.name);
+      setState(res.state);
+      setPlace(res.place);
+      setStakes(res.stakes);
+      setPartnersWanted(res.partnersWanted);
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    if (params.id) {
+      handleGetOneProject(parseInt(params.id));
+    }
+  }, [params.id]);
+
   const defaultProps = {
     center: {
       lat: 48.87121268497986,
@@ -28,7 +70,7 @@ export const ProjectDetail = () => {
     datasets: [
       {
         label: "Etat du projet",
-        data: [3],
+        data: [state],
         backgroundColor: "#f783ac",
         barThickness: "150",
       },
@@ -65,7 +107,7 @@ export const ProjectDetail = () => {
         <NavBar />
         <div className={styles.top}>
           <div>
-            <div className={styles.title}>Dokin</div>
+            <div className={styles.title}>{name}</div>
             <div className={styles.postDate}>Posté le 9 avril 2024</div>
           </div>
         </div>
@@ -87,31 +129,7 @@ export const ProjectDetail = () => {
                 </div>
               </div>
               <div className={styles.projectDescriptionTextContainer}>
-                Si toi aussi, tu trouves que nous sommes tellement connectées
-                que nous nous déconnectons de la réalité, que les réseaux
-                sociaux nous rendent plus asociaux que sociaux. Si toi aussi, tu
-                trouves que nous sommes tellement connectées que nous nous
-                déconnectons de la réalité, que les réseaux sociaux nous rendent
-                plus asociaux que sociaux. Si toi aussi, tu trouves que nous
-                sommes tellement connectées que nous nous déconnectons de la
-                réalité, que les réseaux sociaux nous rendent plus asociaux que
-                sociaux. Si toi aussi, tu trouves que nous sommes tellement
-                connectées que nous nous déconnectons de la réalité, que les
-                réseaux sociaux nous rendent plus asociaux que sociaux. Si toi
-                aussi, tu trouves que nous sommes tellement connectées que nous
-                nous déconnectons de la réalité, que les réseaux sociaux nous
-                rendent plus asociaux que sociaux. Si toi aussi, tu trouves que
-                nous sommes tellement connectées que nous nous déconnectons de
-                la réalité, que les réseaux sociaux nous rendent plus asociaux
-                que sociaux. Si toi aussi, tu trouves que nous sommes tellement
-                connectées que nous nous déconnectons de la réalité, que les
-                réseaux sociaux nous rendent plus asociaux que sociaux. Si toi
-                aussi, tu trouves que nous sommes tellement connectées que nous
-                nous déconnectons de la réalité, que les réseaux sociaux nous
-                rendent plus asociaux que sociaux. Si toi aussi, tu trouves que
-                nous sommes tellement connectées que nous nous déconnectons de
-                la réalité, que les réseaux sociaux nous rendent plus asociaux
-                que sociaux.
+                {description}
               </div>
             </Card>
             <Card className={styles.contentCard}>
@@ -145,51 +163,15 @@ export const ProjectDetail = () => {
                 <div className={styles.cardTitleText}>Les enjeux du projet</div>
               </div>
               <div className={styles.projectDescriptionTextContainer}>
-                <Chip
-                  label="Décarbonner l'économie"
-                  sx={{
-                    background: "#fff0f6",
-                  }}
-                  className={styles.stakeChip}
-                />
-                <Chip
-                  label="Rendre leur pouvoir aux agriculteurs"
-                  sx={{
-                    background: "#f8f0fc",
-                    margin: "1rem",
-                  }}
-                  className={styles.stakeChip}
-                />
-                <Chip
-                  label="Décarbonner l'économie"
-                  sx={{
-                    background: "#f3f0ff",
-                  }}
-                  className={styles.stakeChip}
-                />
-                <Chip
-                  label="Rendre leur pouvoir aux agriculteurs"
-                  sx={{
-                    background: "#edf2ff",
-                    margin: "1rem",
-                  }}
-                  className={styles.stakeChip}
-                />
-                <Chip
-                  label="Décarbonner l'économie"
-                  sx={{
-                    background: "#e7f5ff",
-                  }}
-                  className={styles.stakeChip}
-                />
-                <Chip
-                  label="Rendre leur pouvoir aux agriculteurs"
-                  sx={{
-                    background: "#e3fafc",
-                    margin: "1rem",
-                  }}
-                  className={styles.stakeChip}
-                />
+                {stakes.map((stake) => (
+                  <Chip
+                    label={stake}
+                    sx={{
+                      background: "#fff0f6",
+                    }}
+                    className={styles.stakeChip}
+                  />
+                ))}
               </div>
             </Card>
           </div>
@@ -252,15 +234,11 @@ export const ProjectDetail = () => {
                   Les besoins du projet
                 </div>
               </div>
-              <div className={styles.openPositionsCardContainer}>
-                <OpenPositionsCard />
-              </div>
-              <div className={styles.openPositionsCardContainer}>
-                <OpenPositionsCard />
-              </div>
-              <div className={styles.openPositionsCardContainer}>
-                <OpenPositionsCard />
-              </div>
+              {partnersWanted.map((partner) => (
+                <div className={styles.openPositionsCardContainer}>
+                  <OpenPositionsCard {...partner} />
+                </div>
+              ))}
             </Card>
           </div>
         </div>
