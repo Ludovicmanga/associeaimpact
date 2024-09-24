@@ -22,3 +22,22 @@ export const createProjectApiCall = async (project: {
     })
     return res; 
 }
+
+export const getAllProjectsApiCall = async () => {
+    const res = await axios({
+        url: 'http://localhost:8080/projects/get-all',
+        method: 'get',
+        withCredentials: true,
+    })
+    return res.data; 
+}
+
+
+export const getOneProjectApiCall = async (id: number) => {
+    const res = await axios({
+        url: 'http://localhost:8080/projects/get/' + id,
+        method: 'get',
+        withCredentials: true,
+    })
+    return res.data; 
+}

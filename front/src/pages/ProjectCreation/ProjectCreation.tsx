@@ -26,8 +26,7 @@ const ProjectCreation = () => {
   const [addPartnerModalOpen, setAddPartnerModalOpen] = useState(false);
   const [stakes, setStakes] = useState<string[]>([]);
   const [place, setPlace] = useState("");
-
-  const [partnersList, setPartnersList] = useState<
+  const [partnersWanted, setPartnersWanted] = useState<
     {
       id: string;
       role: string;
@@ -43,7 +42,7 @@ const ProjectCreation = () => {
       founderRole,
       description,
       place,
-      partnersWanted: partnersList,
+      partnersWanted,
     });
   };
 
@@ -147,12 +146,12 @@ const ProjectCreation = () => {
               Votre recherche d'associés
             </div>
             <div>
-              {partnersList.map((partner) => (
+              {partnersWanted.map((partner) => (
                 <Chip
                   className={styles.cofounderChip}
                   label={partner.role}
                   onDelete={() =>
-                    setPartnersList((curr) =>
+                    setPartnersWanted((curr) =>
                       curr.filter((p) => p.id !== partner.id)
                     )
                   }
@@ -161,7 +160,7 @@ const ProjectCreation = () => {
             </div>
             <Button onClick={() => setAddPartnerModalOpen(true)}>
               <Add />
-              {partnersList.length === 0
+              {partnersWanted.length === 0
                 ? "Ajouter"
                 : "Ajouter un nouvel associé recherché"}
             </Button>
@@ -184,7 +183,7 @@ const ProjectCreation = () => {
       <AddPartnerModal
         isOpen={addPartnerModalOpen}
         onClose={() => setAddPartnerModalOpen(false)}
-        setPartnersList={setPartnersList}
+        setPartnersWanted={setPartnersWanted}
         setIsOpen={setAddPartnerModalOpen}
       />
     </div>
