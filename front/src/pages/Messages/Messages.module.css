@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+}
+
+.sidebarContainer {
+  width: 17%;
+}
+
+.mainContentWithNavBar {
+  width: 83%;
+}
+
+.mainContent {
+  display: flex;
+  height: 92vh;
+}
+
+.left {
+  width: 30%;
+  border: solid 0.1px #ced4da;
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 70%;
+  border: solid 0.1px #ced4da;
+  padding: 2rem 2rem 1rem 2rem;
+}
+
+.messagesBoxesSection {
+  height: 90%;
+  overflow-y: scroll;
+}
+
+.messageFieldContainer {
+  background: yellow;
+}

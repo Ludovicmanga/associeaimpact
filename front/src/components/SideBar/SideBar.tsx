@@ -12,6 +12,11 @@ const SideBar = () => {
   const handleNavigateHome = () => {
     navigate("/");
   };
+
+  const handleNavigateToMessages = () => {
+    navigate("/messages");
+  };
+
   return (
     <Drawer
       open={true}
@@ -55,7 +60,7 @@ const SideBar = () => {
           </ListItemButton>
         </div>
         <div className={styles.listItemBtn}>
-          <ListItemButton>
+          <ListItemButton onClick={handleNavigateToMessages}>
             <div className={styles.listItemIcon}>
               <Email />
             </div>

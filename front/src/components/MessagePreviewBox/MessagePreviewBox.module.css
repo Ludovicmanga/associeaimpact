@@ -1,0 +1,22 @@
+.container {
+  padding: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  width: 100%;
+}
+
+.left {
+  display: flex;
+}
+
+.textContainer {
+  margin: 0 0 0 1rem;
+  padding: 0.4rem 0 0 0;
+}
+
+.nameContainer {
+  margin: 0 0 0.1rem 0;
+  font-weight: 600;
+}
