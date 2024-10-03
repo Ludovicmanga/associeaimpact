@@ -12,6 +12,7 @@ import { Skeleton } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { setUser } from "./redux/userSlice";
 import ProjectCreation from "./pages/ProjectCreation/ProjectCreation";
+import Messages from "./pages/Messages/Messages";
 
 const routesWhenLoggedIn = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const routesWhenLoggedIn = createBrowserRouter([
   {
     path: "/create-project",
     element: <ProjectCreation />,
+  },
+  {
+    path: "/messages",
+    element: <Messages />,
   },
   {
     path: "/",

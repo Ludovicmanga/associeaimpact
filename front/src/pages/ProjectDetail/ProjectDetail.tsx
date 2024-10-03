@@ -1,7 +1,7 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import NavBar from "../../components/NavBar/NavBar";
 import styles from "./ProjectDetail.module.css";
-import { Button, Card, Chip, Fab } from "@mui/material";
+import { Card, Chip, Fab } from "@mui/material";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import SideBar from "../../components/SideBar/SideBar";
 import { AiOutlineRise } from "react-icons/ai";
@@ -11,7 +11,7 @@ import GoogleMapReact from "google-map-react";
 import { IoPerson } from "react-icons/io5";
 import { PiSpeakerHighLight } from "react-icons/pi";
 import { FaRegLightbulb } from "react-icons/fa";
-import { FaHandFist, FaMessage, FaRegMessage } from "react-icons/fa6";
+import { FaHandFist, FaMessage } from "react-icons/fa6";
 import OpenPositionsCard from "../../components/openPositionsCard/openPositionsCard";
 import { useEffect, useState } from "react";
 import { getOneProjectApiCall } from "../../helpers/projects.helper";
@@ -38,6 +38,8 @@ export const ProjectDetail = () => {
     }[]
   >([]);
 
+  const navigate = useNavigate();
+
   const handleGetOneProject = async (id: number) => {
     const res = await getOneProjectApiCall(id);
     if (res) {
@@ -49,6 +51,10 @@ export const ProjectDetail = () => {
       setPartnersWanted(res.partnersWanted);
     }
     setIsLoading(false);
+  };
+
+  const handleGoToMessages = () => {
+    navigate("/messages");
   };
 
   useEffect(() => {
@@ -213,7 +219,12 @@ export const ProjectDetail = () => {
                 <div>J'ai déjà monté plusieurs entreprises</div>
               </div>
               <div className={styles.contactBtnContainer}>
-                <Fab variant="extended" size="medium" color="primary">
+                <Fab
+                  variant="extended"
+                  size="medium"
+                  color="primary"
+                  onClick={handleGoToMessages}
+                >
                   <FaMessage className={styles.contactBtnIcon} />
                   Contacter Marion
                 </Fab>

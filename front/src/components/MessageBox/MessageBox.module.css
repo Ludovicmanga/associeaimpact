@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  padding: 0.3rem;
+}
+
+.containerSent {
+  justify-content: end;
+}
+
+.containerReceived {
+  justify-content: start;
+}
+
+.boxContainer {
+  width: 60%;
+  padding: 1rem;
+  border: solid #868e96 0.01px;
+  border-radius: 10px;
+}
+
+.boxContainerSent {
+  background: #ebfbee;
+}
+
+.boxContainerReceived {
+  background: white;
+}
