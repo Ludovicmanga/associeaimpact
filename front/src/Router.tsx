@@ -32,7 +32,7 @@ const routesWhenLoggedIn = createBrowserRouter([
     element: <ProjectCreation />,
   },
   {
-    path: "/messages",
+    path: "/messages/:id",
     element: <Messages />,
   },
   {

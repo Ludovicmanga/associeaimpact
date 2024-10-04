@@ -1,7 +1,11 @@
 import { Avatar, Chip, ListItemButton } from "@mui/material";
 import styles from "./MessagePreviewBox.module.css";
 
-export default function MessagePreviewBox(props: { selected: boolean }) {
+export default function MessagePreviewBox(props: {
+  selected: boolean;
+  name: string;
+  preview: string;
+}) {
   return (
     <ListItemButton
       sx={{
@@ -28,8 +32,8 @@ export default function MessagePreviewBox(props: { selected: boolean }) {
             />
           </div>
           <div className={styles.textContainer}>
-            <div className={styles.nameContainer}>Chris</div>
-            <div>Hi, I just want you to...</div>
+            <div className={styles.nameContainer}>{props.name}</div>
+            <div>{props.preview}</div>
           </div>
         </div>
         <Chip
