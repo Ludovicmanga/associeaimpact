@@ -15,6 +15,7 @@ import { FaHandFist, FaMessage } from "react-icons/fa6";
 import OpenPositionsCard from "../../components/openPositionsCard/openPositionsCard";
 import { useEffect, useState } from "react";
 import { getOneProjectApiCall } from "../../helpers/projects.helper";
+import { EntrepreneurialExperience } from "../../types/enums";
 
 export const ProjectDetail = () => {
   const params = useParams();
@@ -28,15 +29,15 @@ export const ProjectDetail = () => {
     {
       id: string;
       role: string;
+      name: string;
       description: string;
     }[]
   >([]);
-  const [founder, setFounder] = useState<
-    {
-      name: string;
-      entrepreneurialExperience: string;
-    }[]
-  >([]);
+  const [founder, setFounder] = useState<{
+    id: number;
+    name: string;
+    entrepreneurialExperience: string;
+  }>();
 
   const navigate = useNavigate();
 
@@ -49,12 +50,15 @@ export const ProjectDetail = () => {
       setPlace(res.place);
       setStakes(res.stakes);
       setPartnersWanted(res.partnersWanted);
+      setFounder(res.founder);
     }
     setIsLoading(false);
   };
 
   const handleGoToMessages = () => {
-    navigate("/messages");
+    if (founder && founder.id) {
+      navigate(`/messages/${founder.id}`);
+    }
   };
 
   useEffect(() => {
@@ -204,7 +208,7 @@ export const ProjectDetail = () => {
               </div>
               <div className={styles.projetFounderAttribute}>
                 <div className={styles.projetFounderAttributeName}>Prénom</div>
-                <div>Marion</div>
+                <div>{founder?.name}</div>
               </div>
               <div className={styles.projetFounderAttribute}>
                 <div className={styles.projetFounderAttributeName}>
@@ -216,7 +220,18 @@ export const ProjectDetail = () => {
                 <div className={styles.projetFounderAttributeName}>
                   Experience dans l'entrepreneuriat
                 </div>
-                <div>J'ai déjà monté plusieurs entreprises</div>
+                <div>
+                  {founder?.entrepreneurialExperience ===
+                  EntrepreneurialExperience.neverFounder
+                    ? "Je n'ai jamais créé d'entreprise"
+                    : founder?.entrepreneurialExperience ===
+                      EntrepreneurialExperience.onceFounder
+                    ? "J'ai déjà créé une entreprise"
+                    : founder?.entrepreneurialExperience ===
+                      EntrepreneurialExperience.onceFounder
+                    ? "J'ai déjà créé plusieurs entreprises"
+                    : ""}
+                </div>
               </div>
               <div className={styles.contactBtnContainer}>
                 <Fab
@@ -226,7 +241,7 @@ export const ProjectDetail = () => {
                   onClick={handleGoToMessages}
                 >
                   <FaMessage className={styles.contactBtnIcon} />
-                  Contacter Marion
+                  Contacter {founder?.name}
                 </Fab>
               </div>
             </Card>

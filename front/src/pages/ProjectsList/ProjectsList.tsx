@@ -6,7 +6,7 @@ import styles from "./ProjectsList.module.css";
 import { useAppSelector } from "../../redux/hooks";
 import { useEffect, useState } from "react";
 import SideBar from "../../components/SideBar/SideBar";
-import { ProjectsListSkeleton } from "../../components/ProjectsListSkeleton/ProjectsListSkeleton";
+import { ProjectsListSkeleton } from "../../components/Skeletons/ProjectsListSkeleton/ProjectsListSkeleton";
 import { getAllProjectsApiCall } from "../../helpers/projects.helper";
 import { Project } from "../../types/types";
 
@@ -41,6 +41,7 @@ const ProjectsList = () => {
             <div className={styles.projectBoxesContainer}>
               {projects.map((proj) => (
                 <div
+                  key={proj.id}
                   className={styles.projectBox}
                   onClick={() => {
                     nav("/project-details/" + proj.id);

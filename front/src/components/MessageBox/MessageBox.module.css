@@ -16,6 +16,7 @@
   padding: 1rem;
   border: solid #868e96 0.01px;
   border-radius: 10px;
+  position: relative;
 }
 
 .boxContainerSent {
@@ -24,4 +25,15 @@
 
 .boxContainerReceived {
   background: white;
+}
+
+.contentContainer {
+  word-wrap: break-word;
+}
+
+.timeContainer {
+  font-size: 0.8rem;
+  color: #ced4da;
+  display: flex;
+  justify-content: end;
 }
