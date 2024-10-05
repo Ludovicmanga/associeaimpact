@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const createMessage = async (args: {content: string, conversationId: number, receiverId: number }) => {
+export const createMessage = async (args: {content: string, conversationId: number }) => {
     const res = await axios({
         url: `http://localhost:8080/messages/create`,
         method: 'post',

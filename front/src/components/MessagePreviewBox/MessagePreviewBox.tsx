@@ -5,6 +5,7 @@ export default function MessagePreviewBox(props: {
   selected: boolean;
   name: string;
   preview: string;
+  unreadCount: number;
 }) {
   return (
     <ListItemButton
@@ -40,7 +41,7 @@ export default function MessagePreviewBox(props: {
           sx={{
             background: "#fcc2d7",
           }}
-          label={3}
+          label={props.unreadCount}
         />
       </div>
     </ListItemButton>

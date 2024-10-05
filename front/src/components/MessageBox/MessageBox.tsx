@@ -4,6 +4,7 @@ import styles from "./MessageBox.module.css";
 export default function MessageBox(props: {
   type: "sent" | "received";
   message: ReactNode;
+  time: String;
 }) {
   return (
     <div
@@ -21,6 +22,7 @@ export default function MessageBox(props: {
         }
       >
         <div className={styles.contentContainer}>{props.message}</div>
+        <div className={styles.timeContainer}>{props.time}</div>
       </div>
     </div>
   );

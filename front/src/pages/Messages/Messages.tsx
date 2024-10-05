@@ -4,7 +4,7 @@ import MessagePreviewBox from "../../components/MessagePreviewBox/MessagePreview
 import NavBar from "../../components/NavBar/NavBar";
 import SideBar from "../../components/SideBar/SideBar";
 import styles from "./Messages.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MessagePreviewBoxSkeleton from "../../components/Skeletons/MessagePreviewBoxSkeleton/MessagePreviewBoxSkeleton";
 import MessageBoxSectionSkeleton from "../../components/Skeletons/MessageBoxSectionSkeleton/MessageBoxSectionSkeleton";
 import { useParams } from "react-router-dom";
@@ -31,6 +31,8 @@ export default function Messages() {
     }[]
   >([]);
 
+  const divRef = useRef(null);
+
   const [messagesFromActiveConversation, setMessagesFromActiveConversation] =
     useState<
       {
@@ -41,22 +43,27 @@ export default function Messages() {
       }[]
     >([]);
 
-  const [selectedConvId, setSelectedConvId] = useState();
+  const [selectedConvId, setSelectedConvId] = useState<number>();
   const [messageBeingTyped, setMessageBeingTyped] = useState("");
 
   const handleGetAllConversations = async () => {
-    const conversationBetweenUserAndInterlocutor =
-      await getConversationBetweenUserAndInterlocutor(interlocutorIdFromParams);
+    if (interlocutorIdFromParams) {
+      const conversationBetweenUserAndInterlocutor =
+        await getConversationBetweenUserAndInterlocutor(
+          interlocutorIdFromParams
+        );
 
-    if (conversationBetweenUserAndInterlocutor) {
-      setSelectedConvId(conversationBetweenUserAndInterlocutor.id);
-    } else {
-      const createdConv = await createConversation(interlocutorIdFromParams);
-      if (createdConv) {
-        setSelectedConvId(createdConv.id);
+      if (conversationBetweenUserAndInterlocutor && interlocutorIdFromParams) {
+        setSelectedConvId(conversationBetweenUserAndInterlocutor.id);
+      } else {
+        const createdConv = await createConversation(interlocutorIdFromParams);
+        if (createdConv) {
+          setSelectedConvId(createdConv.id);
+        }
       }
     }
     const allUserConversations = await getAllUserConversations();
+
     setConversations(allUserConversations);
   };
 
@@ -68,6 +75,15 @@ export default function Messages() {
   useEffect(() => {
     if (selectedConvId) {
       setIsLoading(true);
+      setConversations((curr) =>
+        curr.map((conv) => {
+          if (conv.id === selectedConvId) {
+            return { ...conv, unreadCount: 0 };
+          } else {
+            return conv;
+          }
+        })
+      );
       handleGetActiveConversationMessage(selectedConvId);
       setIsLoading(false);
     }
@@ -83,13 +99,51 @@ export default function Messages() {
     const createdMessage = await createMessage({
       content,
       conversationId: selectedConvId!,
-      receiverId: interlocutorIdFromParams!,
     });
     if (createdMessage) {
       setMessagesFromActiveConversation((curr) => [...curr, createdMessage]);
       setMessageBeingTyped("");
     }
     setIsLoading(false);
+  };
+
+  const monthsInFrench = [
+    "Janvier",
+    "Février",
+    "Mars",
+    "Avril",
+    "Mai",
+    "Juin",
+    "Juillet",
+    "Août",
+    "Septembre",
+    "Octobre",
+    "Novembre",
+    "Décembre",
+  ];
+
+  const handleGetTime = (timestamp: Date) => {
+    const date = new Date(timestamp);
+    const formattedDayMonthYear = getFormattedDayMonthYear(date);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    return `${formattedDayMonthYear} - ${hours}:${minutes}`;
+  };
+
+  const getFormattedDayMonthYear = (date: Date) => {
+    const day = date.getDay();
+    const month = monthsInFrench[date.getMonth()];
+    const year = date.getFullYear();
+    const todaysDate = new Date();
+    if (
+      date.getDate() === todaysDate.getDate() &&
+      date.getMonth() === todaysDate.getMonth() &&
+      date.getFullYear() === todaysDate.getFullYear()
+    ) {
+      return "aujourd'hui";
+    } else {
+      return `${day} ${month} ${year}`;
+    }
   };
 
   return (
@@ -106,29 +160,33 @@ export default function Messages() {
             ) : (
               <>
                 {conversations.map((conv) => (
-                  <MessagePreviewBox
-                    selected={conv.id === selectedConvId}
-                    name={conv.interlocutorName}
-                    preview={conv.preview}
-                  />
+                  <div onClick={() => setSelectedConvId(conv.id)} key={conv.id}>
+                    <MessagePreviewBox
+                      selected={conv.id === selectedConvId}
+                      name={conv.interlocutorName}
+                      preview={conv.preview}
+                      unreadCount={conv.unreadCount}
+                    />
+                  </div>
                 ))}
               </>
             )}
           </div>
           <div className={styles.right}>
-            <div className={styles.messagesBoxesSection}>
+            <div className={styles.messagesBoxesSection} ref={divRef}>
               {isLoading ? (
                 <MessageBoxSectionSkeleton />
               ) : (
-                <>
+                <div>
                   {messagesFromActiveConversation.map((mess) => (
                     <MessageBox
                       key={mess.id}
                       type={mess.type}
                       message={mess.content}
+                      time={handleGetTime(mess.createdAt)}
                     />
                   ))}
-                </>
+                </div>
               )}
             </div>
             <div className={styles.messageFieldContainer}>
@@ -138,7 +196,6 @@ export default function Messages() {
                 <TextField
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
-                      //@ts-ignore
                       handleCreateMessage(messageBeingTyped);
                     }
                   }}
