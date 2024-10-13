@@ -17,6 +17,10 @@ const SideBar = () => {
     navigate("/messages");
   };
 
+  const handleNavigateMyProjects = () => {
+    navigate("/my-projects");
+  };
+
   return (
     <Drawer
       open={true}
@@ -52,7 +56,7 @@ const SideBar = () => {
           </ListItemButton>
         </div>
         <div className={styles.listItemBtn}>
-          <ListItemButton>
+          <ListItemButton onClick={handleNavigateMyProjects}>
             <div className={styles.listItemIcon}>
               <FaRegHandshake size={21} />
             </div>

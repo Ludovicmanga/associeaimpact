@@ -11,7 +11,7 @@ import { checkAuthApiCall } from "./helpers/auth.helper";
 import { Skeleton } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { setUser } from "./redux/userSlice";
-import ProjectCreation from "./pages/ProjectCreation/ProjectCreation";
+import ProjectCreation from "./pages/ProjectCreationOrEdition/ProjectCreationOrEdition";
 import Messages from "./pages/Messages/Messages";
 
 const routesWhenLoggedIn = createBrowserRouter([
@@ -29,15 +29,23 @@ const routesWhenLoggedIn = createBrowserRouter([
   },
   {
     path: "/create-project",
-    element: <ProjectCreation />,
+    element: <ProjectCreation mode="creation" />,
+  },
+  {
+    path: "/edit-project/:id",
+    element: <ProjectCreation mode="edition" />,
   },
   {
     path: "/messages/:id?",
     element: <Messages />,
   },
   {
+    path: "/my-projects",
+    element: <ProjectsList mode="my projects" />,
+  },
+  {
     path: "/",
-    element: <ProjectsList />,
+    element: <ProjectsList mode="all projects" />,
   },
   {
     path: "/*",
