@@ -1,22 +1,24 @@
 import {
+  Badge,
   IconButton,
   InputAdornment,
   OutlinedInput,
   Popover,
-  TextField,
 } from "@mui/material";
 import styles from "./FiltersRow.module.css";
 import { Add, FilterList, Search, SwapVert } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Project } from "../../types/types";
+import { Filter, Project } from "../../types/types";
 import FilterPopover from "../FilterPopover/FilterPopover";
+import { haveCommonElements } from "../../utils/utils";
 
 export const FiltersRow = (props: {
   allProjects: Project[];
   setFilteredProjects: React.Dispatch<React.SetStateAction<Project[]>>;
 }) => {
   const [searchBtnIsClicked, setSearchBtnIsClicked] = useState(false);
+  const [activeFilters, setActiveFilters] = useState<Filter[]>([]);
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const filterPopoverIsOpen = Boolean(anchorEl);
@@ -35,30 +37,56 @@ export const FiltersRow = (props: {
 
   const [searchInputValue, setSearchInputValue] = useState("");
 
+  const cityFiltersValues = activeFilters
+    .filter((filt) => filt.type === "city")
+    .map((filt) => filt.value.toLocaleLowerCase());
+
+  const stakeFiltersValues = activeFilters
+    .filter((filt) => filt.type === "stake")
+    .map((filt) => filt.value.toLocaleLowerCase());
+
+  const hasMatchingStakes = (proj: Project) => {
+    if (stakeFiltersValues.length === 0) {
+      return true;
+    }
+
+    const projectStakes = proj.stakes.map((stake) => stake.toLocaleLowerCase());
+    return haveCommonElements(projectStakes, stakeFiltersValues);
+  };
+
+  const hasMatchingCity = (proj: Project) => {
+    if (cityFiltersValues.length === 0) {
+      return true;
+    }
+
+    return cityFiltersValues.includes(proj.place.toLocaleLowerCase());
+  };
+
+  const projectNameMatchesSearch = (proj: Project) => {
+    return proj.name
+      .toLocaleLowerCase()
+      .includes(searchInputValue.toLocaleLowerCase());
+  };
+
   useEffect(() => {
     props.setFilteredProjects(
-      props.allProjects.filter((proj) =>
-        proj.name
-          .toLocaleLowerCase()
-          .includes(searchInputValue.toLocaleLowerCase())
-      )
+      props.allProjects
+        .filter((proj) => projectNameMatchesSearch(proj))
+        .filter((proj) => hasMatchingCity(proj))
+        .filter((proj) => hasMatchingStakes(proj))
     );
-  }, [searchInputValue]);
+  }, [searchInputValue, activeFilters]);
 
   return (
     <div className={styles.container}>
       <div className={styles.filterBtnContainer}>
         <div className={styles.filterBtn}>
-          <IconButton onClick={handleClickFilterBtn}>
-            <FilterList />
-            <div className={styles.btnText}>Filtrer</div>
-          </IconButton>
-        </div>
-        <div className={styles.filterBtn}>
-          <IconButton className={styles.filterBtn}>
-            <SwapVert />
-            <div className={styles.btnText}>Trier</div>
-          </IconButton>
+          <Badge badgeContent={activeFilters.length} color="primary">
+            <IconButton onClick={handleClickFilterBtn}>
+              <FilterList />
+              <div className={styles.btnText}>Filtrer</div>
+            </IconButton>
+          </Badge>
         </div>
         {searchBtnIsClicked ? (
           <OutlinedInput
@@ -97,7 +125,10 @@ export const FiltersRow = (props: {
         }}
         elevation={10}
       >
-        <FilterPopover />
+        <FilterPopover
+          activeFilters={activeFilters}
+          setActiveFilters={setActiveFilters}
+        />
       </Popover>
     </div>
   );

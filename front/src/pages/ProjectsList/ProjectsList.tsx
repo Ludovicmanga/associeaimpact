@@ -11,6 +11,7 @@ import {
   getProjectsCreatedByLoggedUserApiCall,
 } from "../../helpers/projects.helper";
 import { Project } from "../../types/types";
+import NoResultInfo from "../../components/NoResultInfo/NoResultInfo";
 
 const ProjectsList = (props: { mode: "all projects" | "my projects" }) => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const ProjectsList = (props: { mode: "all projects" | "my projects" }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [allProjects, setAllProjects] = useState<Project[]>([]);
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
+  const [noResultText, setNoResultText] = useState("");
 
   const handleGetProjects = async () => {
     let projectsToSet;
@@ -25,6 +27,11 @@ const ProjectsList = (props: { mode: "all projects" | "my projects" }) => {
       projectsToSet = await getAllProjectsApiCall();
     } else {
       projectsToSet = await getProjectsCreatedByLoggedUserApiCall();
+    }
+    if (projectsToSet.length === 0) {
+      setNoResultText("Aucun projet n'a été créé");
+    } else {
+      setNoResultText("Pas de résultat pour cette recherche");
     }
     setAllProjects(projectsToSet);
     setFilteredProjects(projectsToSet);
@@ -54,24 +61,30 @@ const ProjectsList = (props: { mode: "all projects" | "my projects" }) => {
               allProjects={allProjects}
               setFilteredProjects={setFilteredProjects}
             />
-            <div className={styles.projectBoxesContainer}>
-              {filteredProjects.map((proj) => (
-                <div
-                  key={proj.id}
-                  className={styles.projectBoxContainer}
-                  onClick={() => handleClickOnProject(proj.id)}
-                >
-                  <ProjectBox
-                    id={proj.id}
-                    name={proj.name}
-                    description={proj.description}
-                    createdAt={proj.createdAt}
-                    stakes={proj.stakes}
-                    isEditable={props.mode === "my projects"}
-                  />
-                </div>
-              ))}
-            </div>
+            {filteredProjects.length === 0 ? (
+              <div className={styles.noResultInfoContainer}>
+                <NoResultInfo text={noResultText} />
+              </div>
+            ) : (
+              <div className={styles.projectBoxesContainer}>
+                {filteredProjects.map((proj) => (
+                  <div
+                    key={proj.id}
+                    className={styles.projectBoxContainer}
+                    onClick={() => handleClickOnProject(proj.id)}
+                  >
+                    <ProjectBox
+                      id={proj.id}
+                      name={proj.name}
+                      description={proj.description}
+                      createdAt={proj.createdAt}
+                      stakes={proj.stakes}
+                      isEditable={props.mode === "my projects"}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </>
         )}
       </div>

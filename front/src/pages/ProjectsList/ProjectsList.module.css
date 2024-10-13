@@ -18,3 +18,10 @@
 .projectBoxContainer {
   width: 50%;
 }
+
+.noResultInfoContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem;
+}

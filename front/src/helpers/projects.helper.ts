@@ -14,12 +14,15 @@ export const createProjectApiCall = async (data: {
         description: string;
     }[];
 }) => {
+    console.log('before res')
+
      const res = await axios({
         url: 'http://localhost:8080/projects/create',
         method: 'post',
         withCredentials: true,
         data
-    })
+    });
+    console.log(res,' is the res')
     return res; 
 }
 

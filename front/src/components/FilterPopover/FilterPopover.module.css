@@ -1,9 +1,58 @@
 .container {
   padding: 1rem;
+  width: 20rem;
+}
+
+.section {
+  margin: 0 0 1.3rem 0;
+}
+
+.deleteActiveFiltersText {
+  margin: 0 0 0 0.2rem;
+  font-size: 0.7rem;
+}
+
+.chipsContainer {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .sectionTitle {
   font-size: 0.9rem;
   font-weight: 600;
-  margin: 0 0 1rem 0;
+  margin: 0 0 0.4rem 0;
+}
+
+.noActiveFilterInfoContainer {
+  display: flex;
+  align-items: center;
+}
+
+.noActiveFilterInfoText {
+  margin: 0 0 0 0.2rem;
+  font-size: 0.8rem;
+  color: "#fff5f5";
+}
+
+.filtersTypeBtnContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 0.5rem 0;
+}
+
+.searchInputContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.filterToSelectContainer {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.4rem 0;
+}
+
+.filtersToSelectListContainer {
+  overflow: scroll;
+  max-height: 15rem;
 }

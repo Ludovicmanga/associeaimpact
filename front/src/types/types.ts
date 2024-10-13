@@ -18,3 +18,9 @@ export type Project = {
     }[];
     createdAt: Date;
 }
+
+export type Filter = {
+    id: string;
+    type: "city" | "stake";
+    value: string;
+  }

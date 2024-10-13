@@ -48,7 +48,8 @@ export default function ProjectCreationOrEdition(props: {
   >([]);
 
   const handleCreateProject = async () => {
-    await createProjectApiCall({
+    console.log("okkk");
+    const createdProject = await createProjectApiCall({
       name,
       state,
       stakes,
@@ -57,6 +58,9 @@ export default function ProjectCreationOrEdition(props: {
       place,
       partnersWanted,
     });
+    if (createdProject) {
+      navigate("/");
+    }
   };
 
   const handleEditProject = async () => {
