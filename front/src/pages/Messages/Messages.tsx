@@ -1,4 +1,9 @@
-import { Skeleton, TextField } from "@mui/material";
+import {
+  InputAdornment,
+  OutlinedInput,
+  Skeleton,
+  TextField,
+} from "@mui/material";
 import MessageBox from "../../components/MessageBox/MessageBox";
 import MessagePreviewBox from "../../components/MessagePreviewBox/MessagePreviewBox";
 import NavBar from "../../components/NavBar/NavBar";
@@ -13,26 +18,57 @@ import {
   getConversationMessages,
 } from "../../helpers/messages.helper";
 import {
+  checkUserHasAccessToConversation,
   createConversation,
   getAllUserConversations,
   getConversationBetweenUserAndInterlocutor,
 } from "../../helpers/conversations";
 import { handleGetTime } from "../../utils/utils";
+import NoResultInfo from "../../components/NoResultInfo/NoResultInfo";
+import noMessagesImg from "../../images/noMessages.svg";
+import NoAccessMessage from "../../components/NoAccessMessage/NoAccessMessage";
+import PaymentModal from "../../components/PaymentModal/PaymentModal";
+import { Conversation } from "../../types/types";
+import { Search } from "@mui/icons-material";
 
 export default function Messages() {
   const [isLoading, setIsLoading] = useState(true);
+  const [paymentModalIsOpen, setPaymentModalIsOpen] = useState(false);
   const params = useParams();
   const interlocutorIdFromParams = parseInt(params.id!);
-  const [conversations, setConversations] = useState<
-    {
-      id: number;
-      interlocutorName: string;
-      unreadCount: number;
-      preview: string;
-    }[]
+  const [selectedConvId, setSelectedConvId] = useState<number>();
+  const [messageBeingTyped, setMessageBeingTyped] = useState("");
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [filteredConversations, setFilteredConversations] = useState<
+    Conversation[]
   >([]);
+  const [hasAccessToConv, setHasAccessToConv] = useState(false);
+  const [searchMessageInput, setSearchMessageInput] = useState("");
+  const endMessageDiv = useRef<HTMLDivElement | null>(null);
 
-  const divRef = useRef(null);
+  const handleOpenPaymentModal = () => setPaymentModalIsOpen(true);
+
+  const checkIfUserHasAccessToConv = async () => {
+    if (selectedConvId) {
+      const userHasAccessToConv = await checkUserHasAccessToConversation(
+        selectedConvId
+      );
+      setHasAccessToConv(userHasAccessToConv);
+      if (userHasAccessToConv) {
+        setConversations((curr) =>
+          curr.map((conv) => {
+            if (conv.id === selectedConvId) {
+              return { ...conv, unreadCount: 0 };
+            } else {
+              return conv;
+            }
+          })
+        );
+        handleGetActiveConversationMessage(selectedConvId);
+      }
+      setIsLoading(false);
+    }
+  };
 
   const [messagesFromActiveConversation, setMessagesFromActiveConversation] =
     useState<
@@ -44,10 +80,17 @@ export default function Messages() {
       }[]
     >([]);
 
-  const [selectedConvId, setSelectedConvId] = useState<number>();
-  const [messageBeingTyped, setMessageBeingTyped] = useState("");
+  const handleScrollToBottom = () => {
+    setTimeout(() => {
+      if (endMessageDiv.current) {
+        endMessageDiv.current.scrollIntoView();
+      }
+    }, 30);
+  };
 
   const handleGetAllConversations = async () => {
+    const allUserConversations = await getAllUserConversations();
+
     if (interlocutorIdFromParams) {
       const conversationBetweenUserAndInterlocutor =
         await getConversationBetweenUserAndInterlocutor(
@@ -63,9 +106,10 @@ export default function Messages() {
         }
       }
     }
-    const allUserConversations = await getAllUserConversations();
-
     setConversations(allUserConversations);
+    if (!selectedConvId && allUserConversations[0]?.id) {
+      setSelectedConvId(allUserConversations[0].id);
+    }
   };
 
   useEffect(() => {
@@ -76,19 +120,24 @@ export default function Messages() {
   useEffect(() => {
     if (selectedConvId) {
       setIsLoading(true);
-      setConversations((curr) =>
-        curr.map((conv) => {
-          if (conv.id === selectedConvId) {
-            return { ...conv, unreadCount: 0 };
-          } else {
-            return conv;
-          }
-        })
-      );
-      handleGetActiveConversationMessage(selectedConvId);
-      setIsLoading(false);
+      checkIfUserHasAccessToConv();
+      handleScrollToBottom();
     }
-  }, [selectedConvId]);
+  }, [selectedConvId, endMessageDiv]);
+
+  useEffect(() => {
+    if (!searchMessageInput || searchMessageInput.length === 0) {
+      setFilteredConversations(conversations);
+    } else {
+      setFilteredConversations((curr) =>
+        conversations.filter((conv) =>
+          conv.interlocutorName
+            .toLocaleLowerCase()
+            .includes(searchMessageInput.toLocaleLowerCase())
+        )
+      );
+    }
+  }, [searchMessageInput, conversations]);
 
   const handleGetActiveConversationMessage = async (conversationId: number) => {
     const messages = await getConversationMessages(conversationId);
@@ -104,6 +153,7 @@ export default function Messages() {
     if (createdMessage) {
       setMessagesFromActiveConversation((curr) => [...curr, createdMessage]);
       setMessageBeingTyped("");
+      handleScrollToBottom();
     }
     setIsLoading(false);
   };
@@ -116,67 +166,111 @@ export default function Messages() {
       <div className={styles.mainContentWithNavBar}>
         <NavBar />
         <div className={styles.mainContent}>
-          <div className={styles.left}>
-            {isLoading ? (
-              <MessagePreviewBoxSkeleton />
-            ) : (
-              <>
-                {conversations.map((conv) => (
-                  <div onClick={() => setSelectedConvId(conv.id)} key={conv.id}>
-                    <MessagePreviewBox
-                      selected={conv.id === selectedConvId}
-                      name={conv.interlocutorName}
-                      preview={conv.preview}
-                      unreadCount={conv.unreadCount}
+          {conversations.length === 0 ? (
+            <div className={styles.noResultInfoContainer}>
+              <NoResultInfo
+                text="Vous n'avez pas de messages"
+                img={noMessagesImg}
+              />
+            </div>
+          ) : (
+            <>
+              <div className={styles.left}>
+                {isLoading ? (
+                  <MessagePreviewBoxSkeleton />
+                ) : (
+                  <>
+                    <div className={styles.searchMessageInputContainer}>
+                      <OutlinedInput
+                        value={searchMessageInput}
+                        onChange={(e) => setSearchMessageInput(e.target.value)}
+                        placeholder="Rechercher"
+                        fullWidth
+                        size="small"
+                        className={styles.filterBtn}
+                        startAdornment={
+                          <InputAdornment position="start">
+                            <Search />
+                          </InputAdornment>
+                        }
+                      />
+                    </div>
+                    {filteredConversations.map((conv) => (
+                      <div
+                        onClick={() => setSelectedConvId(conv.id)}
+                        key={conv.id}
+                      >
+                        <MessagePreviewBox
+                          selected={conv.id === selectedConvId}
+                          name={conv.interlocutorName}
+                          preview={conv.preview}
+                          unreadCount={conv.unreadCount}
+                        />
+                      </div>
+                    ))}
+                  </>
+                )}
+              </div>
+              <div className={styles.right}>
+                <div className={styles.messagesBoxesSection}>
+                  {isLoading ? (
+                    <MessageBoxSectionSkeleton />
+                  ) : !hasAccessToConv && selectedConvId ? (
+                    <NoAccessMessage
+                      subscribeBtnAction={handleOpenPaymentModal}
+                      senderName={
+                        conversations.find((conv) => conv.id === selectedConvId)
+                          ?.interlocutorName || ""
+                      }
                     />
-                  </div>
-                ))}
-              </>
-            )}
-          </div>
-          <div className={styles.right}>
-            <div className={styles.messagesBoxesSection} ref={divRef}>
-              {isLoading ? (
-                <MessageBoxSectionSkeleton />
-              ) : (
-                <div>
-                  {messagesFromActiveConversation.map((mess) => (
-                    <MessageBox
-                      key={mess.id}
-                      type={mess.type}
-                      message={mess.content}
-                      time={handleGetTime(mess.createdAt)}
-                    />
-                  ))}
+                  ) : (
+                    <div>
+                      {messagesFromActiveConversation.map((mess) => (
+                        <MessageBox
+                          key={mess.id}
+                          type={mess.type}
+                          message={mess.content}
+                          time={handleGetTime(mess.createdAt)}
+                        />
+                      ))}
+                      <div ref={endMessageDiv}></div>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-            <div className={styles.messageFieldContainer}>
-              {isLoading ? (
-                <Skeleton height={50} />
-              ) : (
-                <TextField
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handleCreateMessage(messageBeingTyped);
-                    }
-                  }}
-                  value={messageBeingTyped}
-                  onChange={(e) => setMessageBeingTyped(e.target.value)}
-                  placeholder="Ex: Bonjour, et si on se rencontrait ?"
-                  size="small"
-                  fullWidth
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      background: "white",
-                    },
-                  }}
-                />
-              )}
-            </div>
-          </div>
+                <div className={styles.messageFieldContainer}>
+                  {isLoading ? (
+                    <Skeleton height={50} />
+                  ) : hasAccessToConv ? (
+                    <TextField
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          handleCreateMessage(messageBeingTyped);
+                        }
+                      }}
+                      value={messageBeingTyped}
+                      onChange={(e) => setMessageBeingTyped(e.target.value)}
+                      placeholder="Ex: Bonjour, et si on se rencontrait ?"
+                      size="small"
+                      fullWidth
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          background: "white",
+                        },
+                      }}
+                    />
+                  ) : (
+                    <div></div>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
+      <PaymentModal
+        isOpen={paymentModalIsOpen}
+        setIsOpen={setPaymentModalIsOpen}
+      />
     </div>
   );
 }

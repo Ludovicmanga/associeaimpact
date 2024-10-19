@@ -5,6 +5,7 @@ import Modal from "@mui/material/Modal";
 import { TextField } from "@mui/material";
 import styles from "./AddPartnerModal.module.css";
 import { v4 as uuidv4 } from "uuid";
+import { Label } from "@mui/icons-material";
 
 const style = {
   position: "absolute" as "absolute",
@@ -70,8 +71,8 @@ export default function AddPartnerModal(props: {
       >
         <Box sx={style}>
           <div className={styles.input}>
+            <div className={styles.title}>Poste recherché</div>
             <TextField
-              label="Rôle"
               placeholder="Ex: CMO"
               value={role}
               onChange={handleChangeRole}
@@ -79,8 +80,8 @@ export default function AddPartnerModal(props: {
             />
           </div>
           <div className={styles.input}>
+            <div className={styles.title}>Description du poste</div>
             <TextField
-              label="Description"
               multiline
               minRows={2}
               placeholder="Ex: Je cherche quelqu'un pour m'aider sur toute la partie marketing, et rayonnement de la marque"

@@ -4,7 +4,7 @@ import { ProjectState } from "../types/types";
 export const createProjectApiCall = async (data: {
     name: string;
     description: string;
-    place: string;
+    place: google.maps.places.PlaceResult | null;
     state: ProjectState;
     founderRole: string;
     stakes: string[];
@@ -22,7 +22,6 @@ export const createProjectApiCall = async (data: {
         withCredentials: true,
         data
     });
-    console.log(res,' is the res')
     return res; 
 }
 
@@ -30,7 +29,7 @@ export const editProjectApiCall = async (data: {
     id: number;
     name: string;
     description: string;
-    place: string;
+    place: google.maps.places.PlaceResult | null;
     state: ProjectState;
     founderRole: string;
     stakes: string[];

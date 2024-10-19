@@ -8,11 +8,13 @@ import Auth from "./pages/Auth/Auth";
 import ProjectsList from "./pages/ProjectsList/ProjectsList";
 import { useEffect, useState } from "react";
 import { checkAuthApiCall } from "./helpers/auth.helper";
-import { Skeleton } from "@mui/material";
+import { Alert, Skeleton, Snackbar } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { setUser } from "./redux/userSlice";
 import ProjectCreation from "./pages/ProjectCreationOrEdition/ProjectCreationOrEdition";
 import Messages from "./pages/Messages/Messages";
+import StripeReturnPage from "./components/StripeReturnPage/StripeReturnPage";
+import { setSnackBar } from "./redux/snackbarSlice";
 
 const routesWhenLoggedIn = createBrowserRouter([
   {
@@ -42,6 +44,10 @@ const routesWhenLoggedIn = createBrowserRouter([
   {
     path: "/my-projects",
     element: <ProjectsList mode="my projects" />,
+  },
+  {
+    path: "/return",
+    element: <StripeReturnPage />,
   },
   {
     path: "/",
@@ -94,7 +100,33 @@ const Router = () => {
     handleCheckAuth();
   }, []);
 
-  return isLoaded ? <RouterProvider router={router} /> : <Skeleton />;
+  const handleCloseSnackbar = () => {
+    dispatch(setSnackBar(null));
+  };
+
+  const snackbarState = useAppSelector((state) => state.snackbar);
+
+  return isLoaded ? (
+    <>
+      <RouterProvider router={router} />
+      <Snackbar
+        open={snackbarState?.isOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbarState?.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {snackbarState?.message}
+        </Alert>
+      </Snackbar>
+    </>
+  ) : (
+    <Skeleton />
+  );
 };
 
 export default Router;
