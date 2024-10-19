@@ -12,6 +12,8 @@ import {
 } from "../../helpers/projects.helper";
 import { Project } from "../../types/types";
 import NoResultInfo from "../../components/NoResultInfo/NoResultInfo";
+import noResultImgPath from "../../images/undraw_feeling_blue.svg";
+import noSearchImgPath from "../../images/noSearchFound.svg";
 
 const ProjectsList = (props: { mode: "all projects" | "my projects" }) => {
   const navigate = useNavigate();
@@ -20,6 +22,7 @@ const ProjectsList = (props: { mode: "all projects" | "my projects" }) => {
   const [allProjects, setAllProjects] = useState<Project[]>([]);
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
   const [noResultText, setNoResultText] = useState("");
+  const [noResultImg, setNoResultImg] = useState("");
 
   const handleGetProjects = async () => {
     let projectsToSet;
@@ -28,10 +31,13 @@ const ProjectsList = (props: { mode: "all projects" | "my projects" }) => {
     } else {
       projectsToSet = await getProjectsCreatedByLoggedUserApiCall();
     }
+    console.log(projectsToSet, " are the projects");
     if (projectsToSet.length === 0) {
       setNoResultText("Aucun projet n'a été créé");
+      setNoResultImg(noResultImgPath);
     } else {
       setNoResultText("Pas de résultat pour cette recherche");
+      setNoResultImg(noSearchImgPath);
     }
     setAllProjects(projectsToSet);
     setFilteredProjects(projectsToSet);
@@ -63,7 +69,7 @@ const ProjectsList = (props: { mode: "all projects" | "my projects" }) => {
             />
             {filteredProjects.length === 0 ? (
               <div className={styles.noResultInfoContainer}>
-                <NoResultInfo text={noResultText} />
+                <NoResultInfo text={noResultText} img={noResultImg} />
               </div>
             ) : (
               <div className={styles.projectBoxesContainer}>

@@ -34,15 +34,17 @@ export default function MessagePreviewBox(props: {
           </div>
           <div className={styles.textContainer}>
             <div className={styles.nameContainer}>{props.name}</div>
-            <div>{props.preview}</div>
+            <div className={styles.previewContainer}>{props.preview}</div>
           </div>
         </div>
-        <Chip
-          sx={{
-            background: "#fcc2d7",
-          }}
-          label={props.unreadCount}
-        />
+        {props.unreadCount > 0 && (
+          <Chip
+            sx={{
+              background: "#fcc2d7",
+            }}
+            label={props.unreadCount}
+          />
+        )}
       </div>
     </ListItemButton>
   );

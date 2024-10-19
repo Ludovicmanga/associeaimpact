@@ -25,11 +25,30 @@ import {
 } from "../../helpers/projects.helper";
 import { ProjectState } from "../../types/types";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAppDispatch } from "../../redux/hooks";
+import { setSnackBar } from "../../redux/snackbarSlice";
+import {
+  APIProvider,
+  ControlPosition,
+  MapControl,
+  AdvancedMarker,
+  Map,
+  useMap,
+  useMapsLibrary,
+  useAdvancedMarkerRef,
+  AdvancedMarkerRef,
+} from "@vis.gl/react-google-maps";
+import {
+  MapHandler,
+  PlaceAutocomplete,
+} from "../../components/GoogleMapsAPI/GoogleMapsAPI";
+import { stakesList } from "../../types/constants";
 
 export default function ProjectCreationOrEdition(props: {
   mode: "creation" | "edition";
 }) {
   const params = useParams();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [name, setName] = useState("");
@@ -38,7 +57,9 @@ export default function ProjectCreationOrEdition(props: {
   const [state, setState] = useState<ProjectState>(ProjectState.idea);
   const [addPartnerModalOpen, setAddPartnerModalOpen] = useState(false);
   const [stakes, setStakes] = useState<string[]>([]);
-  const [place, setPlace] = useState("");
+  const [place, setPlace] = useState<google.maps.places.PlaceResult | null>(
+    null
+  );
   const [partnersWanted, setPartnersWanted] = useState<
     {
       id: string;
@@ -48,7 +69,6 @@ export default function ProjectCreationOrEdition(props: {
   >([]);
 
   const handleCreateProject = async () => {
-    console.log("okkk");
     const createdProject = await createProjectApiCall({
       name,
       state,
@@ -60,6 +80,13 @@ export default function ProjectCreationOrEdition(props: {
     });
     if (createdProject) {
       navigate("/");
+      dispatch(
+        setSnackBar({
+          isOpen: true,
+          severity: "success",
+          message: "Votre projet a bien été créé",
+        })
+      );
     }
   };
 
@@ -78,6 +105,13 @@ export default function ProjectCreationOrEdition(props: {
       });
       if (editedProject) {
         navigate("/");
+        dispatch(
+          setSnackBar({
+            isOpen: true,
+            severity: "success",
+            message: "Votre projet a bien été modifié",
+          })
+        );
       }
     }
   };
@@ -87,6 +121,13 @@ export default function ProjectCreationOrEdition(props: {
       const deletedRes = await deleteProjectApiCall(parseInt(params.id));
       if (deletedRes) {
         navigate("/");
+        dispatch(
+          setSnackBar({
+            isOpen: true,
+            severity: "success",
+            message: "Votre projet a bien été supprimé",
+          })
+        );
       }
     }
   };
@@ -105,6 +146,8 @@ export default function ProjectCreationOrEdition(props: {
       }
     }
   };
+
+  const API_KEY = "AIzaSyDXxLmTjy7fb0p_I7YgZELDDGgRFzpJjZw";
 
   useEffect(() => {
     if (props.mode === "edition") {
@@ -154,13 +197,12 @@ export default function ProjectCreationOrEdition(props: {
               </div>
               <div className={styles.questionContainer}>
                 <div className={styles.questionTitle}>Lieu du projet</div>
-                <Autocomplete
-                  disablePortal
-                  options={["Paris", "Londres", "Monaco"]}
-                  renderInput={(params) => <TextField {...params} />}
-                  value={place}
-                  onChange={(e, value) => setPlace(value!)}
-                />
+                <APIProvider
+                  apiKey={API_KEY}
+                  solutionChannel="GMP_devsite_samples_v3_rgmautocomplete"
+                >
+                  <PlaceAutocomplete onPlaceSelect={setPlace} />
+                </APIProvider>
               </div>
               <div className={styles.questionContainer}>
                 <div className={styles.questionTitle}>Etat du projet</div>
@@ -210,8 +252,10 @@ export default function ProjectCreationOrEdition(props: {
                 <div className={styles.questionTitle}>Enjeux traités</div>
                 <Autocomplete
                   disablePortal
-                  options={["Agriculture", "Energie", "Social"]}
-                  renderInput={(params) => <TextField {...params} />}
+                  options={stakesList}
+                  renderInput={(params) => (
+                    <TextField placeholder="Ex: Agriculture" {...params} />
+                  )}
                   multiple
                   onChange={(e, values) => setStakes(values)}
                   value={stakes}
@@ -270,7 +314,7 @@ export default function ProjectCreationOrEdition(props: {
                         margin: "0 1rem",
                       }}
                     >
-                      Modifier le projet
+                      Enregistrer
                     </Button>
                     <Button
                       onClick={handleDeleteProject}

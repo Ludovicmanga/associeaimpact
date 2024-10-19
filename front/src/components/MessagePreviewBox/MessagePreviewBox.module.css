@@ -14,9 +14,14 @@
 .textContainer {
   margin: 0 0 0 1rem;
   padding: 0.4rem 0 0 0;
+  display: flex;
+  align-items: center;
 }
 
 .nameContainer {
-  margin: 0 0 0.1rem 0;
   font-weight: 600;
+}
+
+.previewContainer {
+  margin: 0 0 0 0.5rem;
 }

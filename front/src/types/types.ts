@@ -8,7 +8,7 @@ export type Project = {
     id: number;
     name: string;
     description: string;
-    place: string;
+    place: google.maps.places.PlaceResult;
     state: number;
     founderRole: string;
     stakes: string[];
@@ -23,4 +23,11 @@ export type Filter = {
     id: string;
     type: "city" | "stake";
     value: string;
-  }
+}
+
+export type Conversation = {
+    id: number;
+    interlocutorName: string;
+    unreadCount: number;
+    preview: string;
+} 

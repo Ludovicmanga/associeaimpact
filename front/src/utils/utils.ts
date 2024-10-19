@@ -5,11 +5,12 @@ export const handleGetTime = (timestamp: Date) => {
     const formattedDayMonthYear = getFormattedDayMonthYear(date);
     const hours = date.getHours();
     const minutes = date.getMinutes();
-    return `${formattedDayMonthYear} - ${hours}:${minutes}`;
+    const formattedMinutes = minutes < 10 ? '0'+minutes : minutes;
+    return `${formattedDayMonthYear} - ${hours}:${formattedMinutes}`;
 };
 
 export const getFormattedDayMonthYear = (date: Date) => {
-    const day = date.getDay();
+    const day = date.getUTCDate();
     const month = monthsInFrench[date.getMonth()];
     const year = date.getFullYear();
     const todaysDate = new Date();

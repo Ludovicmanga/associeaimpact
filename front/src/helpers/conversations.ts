@@ -1,7 +1,8 @@
 import axios from "axios";
+import { Conversation } from "../types/types";
 
 export const getAllUserConversations = async () => {
-    const res = await axios({
+    const res = await axios<Conversation[]>({
         url: 'http://localhost:8080/conversations/get-user-conversations',
         method: 'get',
         withCredentials: true,
@@ -26,6 +27,15 @@ export const createConversation = async (interlocutorId: number) => {
         data: {
             interlocutorId
         }
+    })
+    return res.data; 
+}
+
+export const checkUserHasAccessToConversation = async (conversationId: number) => {
+    const res = await axios({
+        url: `http://localhost:8080/conversations/check-user-has-access/${conversationId}`,
+        method: 'get',
+        withCredentials: true,
     })
     return res.data; 
 }

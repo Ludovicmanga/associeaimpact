@@ -16,6 +16,7 @@ import OpenPositionsCard from "../../components/openPositionsCard/openPositionsC
 import { useEffect, useState } from "react";
 import { getOneProjectApiCall } from "../../helpers/projects.helper";
 import { EntrepreneurialExperience } from "../../types/enums";
+import GoogleMapsAPI from "../../components/GoogleMapsAPI/GoogleMapsAPI";
 
 export const ProjectDetail = () => {
   const params = useParams();
@@ -23,7 +24,9 @@ export const ProjectDetail = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [state, setState] = useState("");
-  const [place, setPlace] = useState("");
+  const [place, setPlace] = useState<google.maps.places.PlaceResult | null>(
+    null
+  );
   const [stakes, setStakes] = useState<string[]>([]);
   const [partnersWanted, setPartnersWanted] = useState<
     {
@@ -150,13 +153,7 @@ export const ProjectDetail = () => {
                 <div className={styles.cardTitleText}>Lieu du projet</div>
               </div>
               <div style={{ height: "20rem", width: "100%" }}>
-                <GoogleMapReact
-                  bootstrapURLKeys={{
-                    key: "AIzaSyDXxLmTjy7fb0p_I7YgZELDDGgRFzpJjZw",
-                  }}
-                  defaultCenter={defaultProps.center}
-                  defaultZoom={defaultProps.zoom}
-                />
+                <GoogleMapsAPI selectedPlace={place} />
               </div>
             </Card>
             <Card

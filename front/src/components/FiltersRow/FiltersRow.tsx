@@ -59,7 +59,11 @@ export const FiltersRow = (props: {
       return true;
     }
 
-    return cityFiltersValues.includes(proj.place.toLocaleLowerCase());
+    if (proj?.place.formatted_address?.toLocaleLowerCase()) {
+      return cityFiltersValues.includes(
+        proj?.place.formatted_address?.toLocaleLowerCase()
+      );
+    }
   };
 
   const projectNameMatchesSearch = (proj: Project) => {
