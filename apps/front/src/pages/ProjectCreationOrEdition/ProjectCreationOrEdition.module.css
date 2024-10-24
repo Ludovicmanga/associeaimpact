@@ -1,0 +1,47 @@
+.container {
+  display: flex;
+}
+
+.mainContentWithNavBar {
+  width: 100%;
+}
+
+.mainContent {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 2rem 0;
+  padding: 2rem;
+}
+
+.questionContainer {
+  margin: 1.5rem;
+}
+
+.inputLabel {
+  margin: 1rem 0 0.5rem 0;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #495057;
+}
+
+.projectStateItem {
+  display: flex;
+  align-items: center;
+}
+
+.projectStateItemText {
+  margin: 0 0 0 0.6rem;
+}
+
+.submitBtnContainer {
+  margin: 4rem 0 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (min-width: 40rem) {
+  .mainContent {
+    padding: 0;
+  }
+}

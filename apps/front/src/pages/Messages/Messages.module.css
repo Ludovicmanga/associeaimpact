@@ -1,0 +1,86 @@
+.container {
+  display: flex;
+}
+
+.mainContentWithNavBar {
+  width: 100%;
+}
+
+.mainContent {
+  display: flex;
+  height: 92vh;
+}
+
+.topForSmallScreen {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 1rem 0;
+  padding: 1rem;
+  background: white;
+  color: black;
+}
+
+.topForSmallScreenArrowAndPic {
+  display: flex;
+}
+
+.topForSmallScreenPicContainer {
+  margin: 0 0 0 1rem;
+}
+
+.topForSmallScreenInterlocutorName {
+  margin: 0 1rem 0 0;
+}
+
+.messagePreviewsContainerWhenAMessageSelected {
+  display: none;
+}
+
+.messagePreviewsContainerWhenNoMessageSelected {
+  width: 100%;
+}
+
+.messagesSectionContainerWhenAMessageSelected {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  border: solid 0.1px #ced4da;
+  padding: 2rem 2rem 1rem 2rem;
+}
+
+.messagesSectionContainerWhenNoMessageSelected {
+  display: none;
+}
+
+.searchMessageInputContainer {
+  margin: 0.3rem 0.3rem 0.8rem 0.3rem;
+}
+
+.messagesBoxesSection {
+  height: 90%;
+  overflow-y: scroll;
+}
+
+.noResultInfoContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+@media screen and (min-width: 40rem) {
+  .topForSmallScreen {
+    display: none;
+  }
+
+  .messagePreviewsContainerWhenAMessageSelected {
+    display: block;
+    width: 30%;
+  }
+
+  .messagesSectionContainerWhenAMessageSelected {
+    width: 70%;
+  }
+}
