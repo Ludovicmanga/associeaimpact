@@ -18,7 +18,7 @@ export default function StripeReturnPage() {
     if (sessionId) {
       try {
         const res = await axios({
-          url: `http://localhost:8080/stripe/session-status?session_id=${sessionId}`,
+          url: `http://localhost:8080/api/stripe/session-status?session_id=${sessionId}`,
           withCredentials: true,
         });
         if (res.data) {

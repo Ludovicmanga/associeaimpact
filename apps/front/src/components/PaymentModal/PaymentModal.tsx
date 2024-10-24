@@ -28,7 +28,7 @@ export const PaymentModal = (props: {
 const ModalContent = () => {
   const fetchClientSecret = useCallback(async () => {
     const res = await axios(
-      "http://localhost:8080/stripe/create-checkout-session",
+      "http://localhost:8080/api/stripe/create-checkout-session",
       {
         method: "post",
         withCredentials: true,

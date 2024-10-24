@@ -7,7 +7,7 @@ import { EntrepreneurialExperience } from "../types/enums";
 export const loginWithLocal = async (email: string, password: string, dispatch: Dispatch) => {
     try {
         const res = await axios({
-            url: 'http://localhost:8080/auth/login',
+            url: 'http://localhost:8080/api/auth/login',
             method: 'post',
             withCredentials: true,
             data: {
@@ -33,7 +33,7 @@ export const loginWithLocal = async (email: string, password: string, dispatch: 
 export const signUpWithLocalApiCall = async (email: string, password: string, name: string, entrepreneurialExperience: EntrepreneurialExperience, dispatch: Dispatch) => {
     try {
         const res = await axios({
-            url: 'http://localhost:8080/auth/sign-up',
+            url: 'http://localhost:8080/api/auth/sign-up',
             method: 'post',
             withCredentials: true,
             data: {
@@ -61,7 +61,7 @@ export const signUpWithLocalApiCall = async (email: string, password: string, na
 export const loginWithGoogleApiCall = async (access_token: string) => {
     try {
         const res = await axios({
-            url: 'http://localhost:8080/auth/login-google',
+            url: 'http://localhost:8080/api/auth/login-google',
             method: 'post',
             withCredentials: true,
             data: {
@@ -76,7 +76,7 @@ export const loginWithGoogleApiCall = async (access_token: string) => {
 
 export const checkAuthApiCall = async () => {
     const res = await axios({
-        url: 'http://localhost:8080/auth/check-auth',
+        url: 'http://localhost:8080/api/auth/check-auth',
         method: 'get',
         withCredentials: true,
     })
@@ -86,7 +86,7 @@ export const checkAuthApiCall = async () => {
 export const logoutApiCall = async () => {
     try {
         const res = await axios({
-            url: 'http://localhost:8080/auth/logout',
+            url: 'http://localhost:8080/api/auth/logout',
             method: 'post',
             withCredentials: true,
         })
