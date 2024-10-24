@@ -2,19 +2,15 @@
   display: flex;
 }
 
-.sidebarContainer {
-  width: 17%;
-}
-
 .mainContent {
-  width: 83%;
+  width: 100%;
 }
 
 .top {
   display: flex;
   justify-content: start;
   margin: 1rem 0 2rem 0;
-  padding: 0 0 0 5rem;
+  padding: 0 0 0 1rem;
 }
 
 .title {
@@ -28,29 +24,25 @@
 
 .cardsSectionContainer {
   display: flex;
-  justify-content: center;
-}
-
-.cardsSectionContainerLeft,
-.cardsSectionContainerRight {
-  width: 45%;
+  flex-direction: column;
 }
 
 .contentCard {
-  margin: 1rem;
+  margin: 0.7rem 1.1rem;
   padding: 1.3rem;
   min-height: 6rem;
+  border-radius: 25px;
 }
 
 .cardTitle {
   display: flex;
   margin: 0 0 2rem 0;
-  font-weight: 600;
-  font-size: 1.2rem;
 }
 
 .cardTitleText {
   margin: 0 0 0 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
 }
 
 .projetFounderAttribute {
@@ -75,12 +67,58 @@
 
 .projectDescriptionTextContainer {
   padding: 0.5rem;
+  word-break: break-all;
+}
+
+.openPositionCardsTitle {
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  font-size: 0.8rem;
 }
 
 .openPositionsCardContainer {
-  margin: 1rem 0;
+  margin: 1.5rem 0;
+}
+
+.openPostionCardTextContainer {
+  margin: 0 0 0 0.8rem;
+}
+
+.openPositionCardsDescription {
+  word-break: break-all;
+}
+
+.openPositionsCardRole {
+  display: flex;
+  align-items: center;
+  margin: 0 0 0 0.5rem;
 }
 
 .stakeChip {
   margin: 0.2rem;
+}
+
+.noDataInformationBox {
+  display: flex;
+  align-items: center;
+  color: #868e96;
+}
+
+.noDataInformationText {
+  margin: 0 0 0 0.5rem;
+}
+
+@media screen and (min-width: 40rem) {
+  .cardsSectionContainer {
+    justify-content: center;
+    flex-direction: row;
+  }
+
+  .cardsSection {
+    width: 33%;
+  }
+
+  .contentCard {
+    margin: 2rem 1.1rem;
+  }
 }

@@ -6,7 +6,7 @@ export const editUserApiCall = async (data: {
     name: string
 }) => {
     const res = await axios({
-        url: 'http://localhost:8080/users',
+        url: 'http://localhost:8080/api/users',
         method: 'patch',
         withCredentials: true,
         data

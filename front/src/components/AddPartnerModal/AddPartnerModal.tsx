@@ -63,12 +63,7 @@ export default function AddPartnerModal(props: {
 
   return (
     <div>
-      <Modal
-        open={props.isOpen}
-        onClose={props.onClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
+      <Modal open={props.isOpen} onClose={props.onClose}>
         <Box sx={style}>
           <div className={styles.input}>
             <div className={styles.title}>Poste recherché</div>

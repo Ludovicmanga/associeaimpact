@@ -1,20 +1,15 @@
-.container {
+.drawerContainer {
   padding: 1rem 0.5rem;
   height: 100vh;
 }
 
 .logoContainer {
   display: flex;
+  justify-content: center;
   padding: 1rem;
   cursor: pointer;
-}
-
-.logoText {
-  margin: 0 0 0 0.6rem;
+  font-size: 1.5rem;
   font-weight: 600;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
 }
 
 .pagesListContainer {
@@ -24,7 +19,7 @@
 .listItemBtn {
   display: flex;
   align-items: center;
-  margin: 1.2rem 0;
+  margin: 1.5rem 0;
   color: #495057;
 }
 
@@ -35,4 +30,10 @@
 
 .listText {
   margin: 0 0 0 1rem;
+}
+
+@media screen and (min-width: 40rem) {
+  .container {
+    width: 20%;
+  }
 }

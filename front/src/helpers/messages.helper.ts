@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const createMessage = async (args: {content: string, conversationId: number }) => {
     const res = await axios({
-        url: `http://localhost:8080/messages/create`,
+        url: `http://localhost:8080/api/messages/create`,
         method: 'post',
         withCredentials: true,
         data: args
@@ -12,7 +12,7 @@ export const createMessage = async (args: {content: string, conversationId: numb
 
 export const getConversationMessages = async (conversationId: number) => {
     const res = await axios({
-        url: `http://localhost:8080/messages/get-conversation-messages/${conversationId}`,
+        url: `http://localhost:8080/api/messages/get-conversation-messages/${conversationId}`,
         method: 'get',
         withCredentials: true,
     })

@@ -12,6 +12,7 @@ import {
   AdvancedMarkerRef,
 } from "@vis.gl/react-google-maps";
 import styles from "./GoogleMapsApi.module.css";
+import { TextField } from "@mui/material";
 
 const API_KEY = "AIzaSyDXxLmTjy7fb0p_I7YgZELDDGgRFzpJjZw";
 
@@ -37,6 +38,7 @@ export default function GoogleMapsAPI(props: {
         <AdvancedMarker ref={markerRef} position={null} />
       </Map>
       <MapHandler place={props.selectedPlace} marker={marker} />
+      <PlaceAutocomplete onPlaceSelect={setSelectedPlace} />
     </APIProvider>
   );
 }
@@ -63,14 +65,14 @@ export const MapHandler = ({ place, marker }: MapHandlerProps) => {
 
 interface PlaceAutocompleteProps {
   onPlaceSelect: (place: google.maps.places.PlaceResult | null) => void;
+  placeInputErrorHelperText?: string;
+  placeInputError?: boolean;
 }
 
-export const PlaceAutocomplete = ({
-  onPlaceSelect,
-}: PlaceAutocompleteProps) => {
+export const PlaceAutocomplete = (props: PlaceAutocompleteProps) => {
   const [placeAutocomplete, setPlaceAutocomplete] =
     useState<google.maps.places.Autocomplete | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const places = useMapsLibrary("places");
 
   useEffect(() => {
@@ -87,16 +89,20 @@ export const PlaceAutocomplete = ({
     if (!placeAutocomplete) return;
 
     placeAutocomplete.addListener("place_changed", () => {
-      onPlaceSelect(placeAutocomplete.getPlace());
+      props.onPlaceSelect(placeAutocomplete.getPlace());
     });
-  }, [onPlaceSelect, placeAutocomplete]);
+  }, [props.onPlaceSelect, placeAutocomplete]);
 
   return (
-    <div className="autocomplete-container">
-      <input
+    <div>
+      <TextField
         placeholder="Ex: Paris"
+        inputRef={(ref) => {
+          inputRef.current = ref;
+        }}
         className={styles.searchInput}
-        ref={inputRef}
+        error={props.placeInputError}
+        helperText={props ? props.placeInputErrorHelperText : ""}
       />
     </div>
   );

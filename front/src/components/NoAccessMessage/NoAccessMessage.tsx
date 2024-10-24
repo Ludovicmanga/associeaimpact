@@ -1,4 +1,4 @@
-import { Card, Paper } from "@mui/material";
+import { Card, Paper, useMediaQuery } from "@mui/material";
 import SexyBtn from "../SexyBtn/SexyBtn";
 import styles from "./NoAccessMessage.module.css";
 import { CheckCircle } from "@mui/icons-material";
@@ -7,11 +7,13 @@ export default function NoAccessMessage(props: {
   senderName: string;
   subscribeBtnAction: () => void;
 }) {
+  const bigScreen = useMediaQuery("(min-width: 40rem)");
+
   return (
     <Paper
       sx={{
-        padding: "2rem 6rem",
-        height: "80%",
+        padding: bigScreen ? "2rem 6rem" : "1rem",
+        height: bigScreen ? "80%" : "100%",
         background: "#212529",
       }}
     >
@@ -40,7 +42,7 @@ export default function NoAccessMessage(props: {
         sx={{
           background: "#343a40",
           color: "white",
-          padding: "2rem",
+          padding: bigScreen ? "2rem" : "1rem",
         }}
         variant="elevation"
       >

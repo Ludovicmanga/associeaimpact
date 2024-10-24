@@ -1,8 +1,11 @@
 import {
+  Avatar,
+  IconButton,
   InputAdornment,
   OutlinedInput,
   Skeleton,
   TextField,
+  useMediaQuery,
 } from "@mui/material";
 import MessageBox from "../../components/MessageBox/MessageBox";
 import MessagePreviewBox from "../../components/MessagePreviewBox/MessagePreviewBox";
@@ -29,7 +32,8 @@ import noMessagesImg from "../../images/noMessages.svg";
 import NoAccessMessage from "../../components/NoAccessMessage/NoAccessMessage";
 import PaymentModal from "../../components/PaymentModal/PaymentModal";
 import { Conversation } from "../../types/types";
-import { Search } from "@mui/icons-material";
+import { Search, West } from "@mui/icons-material";
+import NoSelectedMessage from "../../components/NoSelectedMessage/NoSelectedMessage";
 
 export default function Messages() {
   const [isLoading, setIsLoading] = useState(true);
@@ -107,9 +111,9 @@ export default function Messages() {
       }
     }
     setConversations(allUserConversations);
-    if (!selectedConvId && allUserConversations[0]?.id) {
+    /* if (!selectedConvId && allUserConversations[0]?.id) {
       setSelectedConvId(allUserConversations[0].id);
-    }
+    } */
   };
 
   useEffect(() => {
@@ -160,11 +164,33 @@ export default function Messages() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.sidebarContainer}>
-        <SideBar />
-      </div>
+      <SideBar />
       <div className={styles.mainContentWithNavBar}>
         <NavBar />
+        {selectedConvId && (
+          <div className={styles.topForSmallScreen}>
+            <div className={styles.topForSmallScreenArrowAndPic}>
+              <IconButton onClick={() => setSelectedConvId(undefined)}>
+                <West />
+              </IconButton>
+              <div className={styles.topForSmallScreenPicContainer}>
+                <Avatar
+                  sx={{
+                    height: 60,
+                    width: 60,
+                  }}
+                  variant="circular"
+                />
+              </div>
+            </div>
+            <div className={styles.topForSmallScreenInterlocutorName}>
+              {
+                conversations.find((conv) => conv.id === selectedConvId)
+                  ?.interlocutorName
+              }
+            </div>
+          </div>
+        )}
         <div className={styles.mainContent}>
           {conversations.length === 0 ? (
             <div className={styles.noResultInfoContainer}>
@@ -175,7 +201,13 @@ export default function Messages() {
             </div>
           ) : (
             <>
-              <div className={styles.left}>
+              <div
+                className={
+                  selectedConvId
+                    ? styles.messagePreviewsContainerWhenAMessageSelected
+                    : styles.messagePreviewsContainerWhenNoMessageSelected
+                }
+              >
                 {isLoading ? (
                   <MessagePreviewBoxSkeleton />
                 ) : (
@@ -211,11 +243,19 @@ export default function Messages() {
                   </>
                 )}
               </div>
-              <div className={styles.right}>
+              <div
+                className={
+                  selectedConvId
+                    ? styles.messagesSectionContainerWhenAMessageSelected
+                    : styles.messagesSectionContainerWhenNoMessageSelected
+                }
+              >
                 <div className={styles.messagesBoxesSection}>
                   {isLoading ? (
                     <MessageBoxSectionSkeleton />
-                  ) : !hasAccessToConv && selectedConvId ? (
+                  ) : !selectedConvId ? (
+                    <NoSelectedMessage />
+                  ) : selectedConvId && !hasAccessToConv ? (
                     <NoAccessMessage
                       subscribeBtnAction={handleOpenPaymentModal}
                       senderName={

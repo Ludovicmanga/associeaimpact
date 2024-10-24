@@ -1,8 +1,8 @@
 .container {
   display: flex;
   align-items: center;
-  padding: 1rem 1rem 1rem 2rem;
   justify-content: space-between;
+  padding: 0 1rem;
 }
 
 .filterBtnContainer {
@@ -15,5 +15,16 @@
 
 .btnText {
   margin: 0 0 0 0.5rem;
-  font-size: 1rem;
+  font-size: 0.8rem;
+}
+
+@media screen and (min-width: 40rem) {
+  .container {
+    padding: 1rem 1rem 1rem 2rem;
+  }
+
+  .btnText {
+    margin: 0 0 0 0.5rem;
+    font-size: 1rem;
+  }
 }

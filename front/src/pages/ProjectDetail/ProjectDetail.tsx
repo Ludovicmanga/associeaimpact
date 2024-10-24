@@ -1,25 +1,27 @@
 import { useNavigate, useParams } from "react-router-dom";
 import NavBar from "../../components/NavBar/NavBar";
 import styles from "./ProjectDetail.module.css";
-import { Card, Chip, Fab } from "@mui/material";
-import { FaMapMarkerAlt } from "react-icons/fa";
+import { Avatar, Card, Chip, Fab } from "@mui/material";
+import { FaCrown } from "react-icons/fa";
 import SideBar from "../../components/SideBar/SideBar";
-import { AiOutlineRise } from "react-icons/ai";
 import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
-import GoogleMapReact from "google-map-react";
-import { IoPerson } from "react-icons/io5";
-import { PiSpeakerHighLight } from "react-icons/pi";
-import { FaRegLightbulb } from "react-icons/fa";
-import { FaHandFist, FaMessage } from "react-icons/fa6";
-import OpenPositionsCard from "../../components/openPositionsCard/openPositionsCard";
+import { PiEmptyThin } from "react-icons/pi";
+import { FaMessage } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import { getOneProjectApiCall } from "../../helpers/projects.helper";
 import { EntrepreneurialExperience } from "../../types/enums";
 import GoogleMapsAPI from "../../components/GoogleMapsAPI/GoogleMapsAPI";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { setNeedToLoginModal } from "../../redux/needToLoginModalSlice";
+import { handleGetCreationDate } from "../../utils/utils";
+import { Partner } from "../../types/types";
+import { ViewPartnerModal } from "../../components/ViewPartnerModal/ViewPartnerModal";
 
 export const ProjectDetail = () => {
   const params = useParams();
+  const dispatch = useAppDispatch();
+  const loggedUserState = useAppSelector((state) => state.user);
   const [isLoading, setIsLoading] = useState(true);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -28,19 +30,15 @@ export const ProjectDetail = () => {
     null
   );
   const [stakes, setStakes] = useState<string[]>([]);
-  const [partnersWanted, setPartnersWanted] = useState<
-    {
-      id: string;
-      role: string;
-      name: string;
-      description: string;
-    }[]
-  >([]);
+  const [createdAt, setCreatedAt] = useState<Date>();
+  const [partnersWanted, setPartnersWanted] = useState<Partner[]>([]);
   const [founder, setFounder] = useState<{
     id: number;
     name: string;
     entrepreneurialExperience: string;
   }>();
+  const [selectedPartner, setSelectedPartner] = useState<Partner>();
+  const [viewPartnerModalIsOpen, setViewPartnerModalIsOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -54,13 +52,23 @@ export const ProjectDetail = () => {
       setStakes(res.stakes);
       setPartnersWanted(res.partnersWanted);
       setFounder(res.founder);
+      setCreatedAt(res.createdAt);
     }
     setIsLoading(false);
   };
 
   const handleGoToMessages = () => {
-    if (founder && founder.id) {
-      navigate(`/messages/${founder.id}`);
+    if (loggedUserState) {
+      if (founder && founder.id) {
+        navigate(`/messages/${founder.id}`);
+      }
+    } else {
+      dispatch(
+        setNeedToLoginModal({
+          isOpen: true,
+          message: "Vous devez vous connecter pour envoyer un message",
+        })
+      );
     }
   };
 
@@ -69,14 +77,6 @@ export const ProjectDetail = () => {
       handleGetOneProject(parseInt(params.id));
     }
   }, [params.id]);
-
-  const defaultProps = {
-    center: {
-      lat: 48.87121268497986,
-      lng: 2.3471133469957124,
-    },
-    zoom: 11,
-  };
 
   const barData = {
     labels: [""],
@@ -113,30 +113,33 @@ export const ProjectDetail = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.sidebarContainer}>
-        <SideBar />
-      </div>
+      <SideBar />
       <div className={styles.mainContent}>
-        <NavBar />
-        <div className={styles.top}>
-          <div>
-            <div className={styles.title}>{name}</div>
-            <div className={styles.postDate}>Posté le 9 avril 2024</div>
-          </div>
-        </div>
+        <NavBar
+          startElement={
+            <div className={styles.top}>
+              <div>
+                <div className={styles.title}>{name}</div>
+                <div className={styles.postDate}>
+                  Posté {handleGetCreationDate(createdAt!)}
+                </div>
+              </div>
+            </div>
+          }
+        />
+
         <div className={styles.cardsSectionContainer}>
-          <div className={styles.cardsSectionContainerLeft}>
+          <div className={styles.cardsSection}>
             <Card
               className={styles.contentCard}
               sx={{
                 overflow: "scroll",
                 maxHeight: "25rem",
+                borderRadius: "25px",
               }}
             >
               <div className={styles.cardTitle}>
-                <div className={styles.cardTitleIcon}>
-                  <PiSpeakerHighLight size={18} />
-                </div>
+                <div className={styles.cardTitleIcon}>📃</div>
                 <div className={styles.cardTitleText}>
                   Le projet en quelques mots
                 </div>
@@ -145,60 +148,44 @@ export const ProjectDetail = () => {
                 {description}
               </div>
             </Card>
-            <Card className={styles.contentCard}>
+            <Card
+              className={styles.contentCard}
+              sx={{
+                borderRadius: "25px",
+              }}
+            >
               <div className={styles.cardTitle}>
-                <div className={styles.cardTitleIcon}>
-                  <FaMapMarkerAlt size={17} />
-                </div>
+                <div className={styles.cardTitleIcon}>🌐</div>
                 <div className={styles.cardTitleText}>Lieu du projet</div>
               </div>
               <div style={{ height: "20rem", width: "100%" }}>
                 <GoogleMapsAPI selectedPlace={place} />
               </div>
             </Card>
+          </div>
+          <div className={styles.cardsSection}>
             <Card
               className={styles.contentCard}
               sx={{
-                overflow: "scroll",
-                maxHeight: "25rem",
+                borderRadius: "25px",
               }}
             >
               <div className={styles.cardTitle}>
-                <div className={styles.cardTitleIcon}>
-                  <FaHandFist size={18} />
-                </div>
-                <div className={styles.cardTitleText}>Les enjeux du projet</div>
-              </div>
-              <div className={styles.projectDescriptionTextContainer}>
-                {stakes.map((stake) => (
-                  <Chip
-                    label={stake}
-                    sx={{
-                      background: "#fff0f6",
-                    }}
-                    className={styles.stakeChip}
-                  />
-                ))}
-              </div>
-            </Card>
-          </div>
-          <div className={styles.cardsSectionContainerRight}>
-            <Card className={styles.contentCard}>
-              <div className={styles.cardTitle}>
-                <div className={styles.cardTitleIcon}>
-                  <AiOutlineRise size={18} />
-                </div>
+                <div className={styles.cardTitleIcon}>🚀</div>
                 <div className={styles.cardTitleText}>Etat du projet</div>
               </div>
               {/* 
 // @ts-ignore */}
               <Bar options={options} data={barData} />
             </Card>
-            <Card className={styles.contentCard}>
+            <Card
+              className={styles.contentCard}
+              sx={{
+                borderRadius: "25px",
+              }}
+            >
               <div className={styles.cardTitle}>
-                <div className={styles.cardTitleIcon}>
-                  <IoPerson size={18} />
-                </div>
+                <div className={styles.cardTitleIcon}>🦸‍♂️</div>
                 <div className={styles.cardTitleText}>
                   Qui porte le projet ?
                 </div>
@@ -225,7 +212,7 @@ export const ProjectDetail = () => {
                       EntrepreneurialExperience.onceFounder
                     ? "J'ai déjà créé une entreprise"
                     : founder?.entrepreneurialExperience ===
-                      EntrepreneurialExperience.onceFounder
+                      EntrepreneurialExperience.serialFounder
                     ? "J'ai déjà créé plusieurs entreprises"
                     : ""}
                 </div>
@@ -242,30 +229,112 @@ export const ProjectDetail = () => {
                 </Fab>
               </div>
             </Card>
+          </div>
+          <div className={styles.cardsSection}>
             <Card
               className={styles.contentCard}
               sx={{
                 overflow: "scroll",
                 maxHeight: "25rem",
+                borderRadius: "25px",
               }}
             >
               <div className={styles.cardTitle}>
-                <div className={styles.cardTitleIcon}>
-                  <FaRegLightbulb size={18} />
-                </div>
+                <div className={styles.cardTitleIcon}>⭐</div>
+                <div className={styles.cardTitleText}>Les enjeux du projet</div>
+              </div>
+              <div className={styles.projectDescriptionTextContainer}>
+                {stakes.length === 0 ? (
+                  <div className={styles.noDataInformationBox}>
+                    <PiEmptyThin />
+                    <div className={styles.noDataInformationText}>
+                      Aucun enjeu n'a été renseigné
+                    </div>
+                  </div>
+                ) : (
+                  stakes.map((stake) => (
+                    <Chip
+                      key={stake}
+                      label={stake}
+                      sx={{
+                        background: "#fff0f6",
+                      }}
+                      className={styles.stakeChip}
+                    />
+                  ))
+                )}
+              </div>
+            </Card>
+            <Card
+              className={styles.contentCard}
+              sx={{
+                overflow: "scroll",
+                maxHeight: "25rem",
+                borderRadius: "25px",
+              }}
+            >
+              <div className={styles.cardTitle}>
+                <div className={styles.cardTitleIcon}>🤞</div>
                 <div className={styles.cardTitleText}>
                   Les besoins du projet
                 </div>
               </div>
-              {partnersWanted.map((partner) => (
-                <div className={styles.openPositionsCardContainer}>
-                  <OpenPositionsCard {...partner} />
-                </div>
-              ))}
+              <div className={styles.openPositionCardsContainer}>
+                {partnersWanted.length === 0 ? (
+                  <div className={styles.noDataInformationBox}>
+                    <PiEmptyThin />
+                    <div className={styles.noDataInformationText}>
+                      Aucun besoin d'associés n'a été spécifié
+                    </div>
+                  </div>
+                ) : (
+                  partnersWanted.map((partner) => (
+                    <div
+                      onClick={() => {
+                        setSelectedPartner(partner);
+                        setViewPartnerModalIsOpen(true);
+                      }}
+                    >
+                      <Card
+                        key={partner.id}
+                        className={styles.openPositionsCardContainer}
+                        sx={{
+                          padding: "1.5rem 0.3rem",
+                          display: "flex",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <Avatar
+                          sx={{
+                            background: "#f1f3f5",
+                          }}
+                        >
+                          <FaCrown color="#ffe066" size={15} />
+                        </Avatar>
+                        <div className={styles.openPostionCardTextContainer}>
+                          <div className={styles.openPositionCardsTitle}>
+                            {partner.role}
+                          </div>
+                          <div className={styles.openPositionCardsDescription}>
+                            {partner.description.substring(0, 30)}...
+                          </div>
+                        </div>
+                      </Card>
+                    </div>
+                  ))
+                )}
+              </div>
             </Card>
           </div>
         </div>
       </div>
+      {selectedPartner && (
+        <ViewPartnerModal
+          isOpen={viewPartnerModalIsOpen}
+          setIsOpen={setViewPartnerModalIsOpen}
+          partner={selectedPartner}
+        />
+      )}
     </div>
   );
 };

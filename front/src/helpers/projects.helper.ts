@@ -17,7 +17,7 @@ export const createProjectApiCall = async (data: {
     console.log('before res')
 
      const res = await axios({
-        url: 'http://localhost:8080/projects/create',
+        url: 'http://localhost:8080/api/projects/create',
         method: 'post',
         withCredentials: true,
         data
@@ -40,7 +40,7 @@ export const editProjectApiCall = async (data: {
     }[];
 }) => {
      const res = await axios({
-        url: 'http://localhost:8080/projects/edit',
+        url: 'http://localhost:8080/api/projects/edit',
         method: 'patch',
         withCredentials: true,
         data
@@ -50,7 +50,7 @@ export const editProjectApiCall = async (data: {
 
 export const deleteProjectApiCall = async (id: number) => {
     const res = await axios({
-        url: 'http://localhost:8080/projects/delete/' + id,
+        url: 'http://localhost:8080/api/projects/delete/' + id,
         method: 'delete',
         withCredentials: true,
     })
@@ -59,7 +59,7 @@ export const deleteProjectApiCall = async (id: number) => {
 
 export const getAllProjectsApiCall = async () => {
     const res = await axios({
-        url: 'http://localhost:8080/projects/get-all',
+        url: 'http://localhost:8080/api/projects/get-all',
         method: 'get',
         withCredentials: true,
     })
@@ -68,7 +68,7 @@ export const getAllProjectsApiCall = async () => {
 
 export const getProjectsCreatedByLoggedUserApiCall = async () => {
     const res = await axios({
-        url: 'http://localhost:8080/projects/get-created-by-logged-user',
+        url: 'http://localhost:8080/api/projects/get-created-by-logged-user',
         method: 'get',
         withCredentials: true,
     })
@@ -77,7 +77,7 @@ export const getProjectsCreatedByLoggedUserApiCall = async () => {
 
 export const getOneProjectApiCall = async (id: number) => {
     const res = await axios({
-        url: 'http://localhost:8080/projects/get/' + id,
+        url: 'http://localhost:8080/api/projects/get/' + id,
         method: 'get',
         withCredentials: true,
     })

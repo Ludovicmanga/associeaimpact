@@ -1,50 +1,89 @@
-import { Drawer, ListItemButton, Paper } from "@mui/material";
+import { Drawer, ListItemButton, useMediaQuery } from "@mui/material";
 import styles from "./Sidebar.module.css";
-import { AutoGraph, Email, Person } from "@mui/icons-material";
-import Lottie from "lottie-react";
-import pinkProject from "../../images/pinkProject.json";
+import { Email, Menu, Settings } from "@mui/icons-material";
 import { FaRegHandshake, FaRegLightbulb } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { setNeedToLoginModal } from "../../redux/needToLoginModalSlice";
+import logo from "../../images/logo.svg";
+import { setSidebar } from "../../redux/sidebarSlice";
 
 const SideBar = () => {
+  const sidebarState = useAppSelector((state) => state.sidebar);
+  const dispatch = useAppDispatch();
+  const bigScreen = useMediaQuery("(min-width: 40rem)");
+
+  return (
+    <div className={styles.container}>
+      <Drawer
+        open={sidebarState.isOpen}
+        onClose={() =>
+          dispatch(
+            setSidebar({
+              isOpen: false,
+            })
+          )
+        }
+        className={styles.drawerContainer}
+        sx={{
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            boxSizing: "border-box",
+          },
+        }}
+        variant={bigScreen ? "permanent" : "temporary"}
+      >
+        <SidebarContent />
+      </Drawer>
+    </div>
+  );
+};
+
+export default SideBar;
+
+const SidebarContent = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const loggedUserState = useAppSelector((state) => state.user);
 
   const handleNavigateHome = () => {
     navigate("/");
   };
 
   const handleNavigateToMessages = () => {
-    navigate("/messages");
+    if (loggedUserState) {
+      navigate("/messages");
+    } else {
+      dispatch(
+        setNeedToLoginModal({
+          isOpen: true,
+          message: "Vous devez vous connecter pour voir vos messages",
+        })
+      );
+    }
   };
 
   const handleNavigateMyProjects = () => {
-    navigate("/my-projects");
+    if (loggedUserState) {
+      navigate("/my-projects");
+    } else {
+      dispatch(
+        setNeedToLoginModal({
+          isOpen: true,
+          message: "Vous devez vous connecter pour voir vos projets",
+        })
+      );
+    }
   };
 
+  const handleNavigateToMyProfile = () => {
+    navigate("/profile");
+  };
   return (
-    <Drawer
-      open={true}
-      className={styles.container}
-      elevation={10}
-      sx={{
-        width: "17%",
-        flexShrink: 0,
-        "& .MuiDrawer-paper": {
-          width: "17%",
-          boxSizing: "border-box",
-        },
-      }}
-      variant="permanent"
-    >
+    <div>
+      {" "}
       <div className={styles.logoContainer} onClick={handleNavigateHome}>
-        <div>
-          <Lottie
-            animationData={pinkProject}
-            loop={true}
-            style={{ height: 50 }}
-          />
-        </div>
-        <div className={styles.logoText}>Associé à impact</div>
+        <img src={logo} alt="logo" height={70} />
       </div>
       <div className={styles.pagesListContainer}>
         <div className={styles.listItemBtn}>
@@ -71,9 +110,17 @@ const SideBar = () => {
             <div className={styles.listText}>Mes messages</div>
           </ListItemButton>
         </div>
+        {loggedUserState && (
+          <div className={styles.listItemBtn}>
+            <ListItemButton onClick={handleNavigateToMyProfile}>
+              <div className={styles.listItemIcon}>
+                <Settings />
+              </div>
+              <div className={styles.listText}>Mon profil</div>
+            </ListItemButton>
+          </div>
+        )}
       </div>
-    </Drawer>
+    </div>
   );
 };
-
-export default SideBar;

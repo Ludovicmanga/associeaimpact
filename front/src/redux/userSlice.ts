@@ -1,8 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import { EntrepreneurialExperience } from '../types/enums';
 
 type UserType = {
-  email: string
+  email: string,
+  name: string,
+  entrepreneurialExperience: EntrepreneurialExperience
 } | null;
 
 const initialState: UserType = null as UserType;
