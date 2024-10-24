@@ -2,25 +2,26 @@
   display: flex;
 }
 
-.sidebarContainer {
-  width: 17%;
-}
-
 .mainContentWithNavBar {
-  width: 83%;
+  width: 100%;
 }
 
 .mainContent {
-  padding: 2rem 10rem 3.3rem 10rem;
+  display: flex;
+  justify-content: center;
+  margin: 0 0 2rem 0;
+  padding: 2rem;
 }
 
 .questionContainer {
   margin: 1.5rem;
 }
 
-.questionTitle {
+.inputLabel {
+  margin: 1rem 0 0.5rem 0;
   font-weight: 600;
-  margin: 0 0 0.5rem 0;
+  font-size: 0.8rem;
+  color: #495057;
 }
 
 .projectStateItem {
@@ -32,13 +33,15 @@
   margin: 0 0 0 0.6rem;
 }
 
-.cofounderChip {
-  margin: 0.3rem;
-}
-
 .submitBtnContainer {
   margin: 4rem 0 0 0;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+@media screen and (min-width: 40rem) {
+  .mainContent {
+    padding: 0;
+  }
 }

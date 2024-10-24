@@ -1,11 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userReducer from './userSlice';
 import snackbarReducer from './snackbarSlice';
+import needToLoginModalReducer from './needToLoginModalSlice';
+import sidebarReducer from './sidebarSlice';
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
-    snackbar: snackbarReducer
+    snackbar: snackbarReducer,
+    needToLoginModal: needToLoginModalReducer,
+    sidebar: sidebarReducer
   },
 })
 

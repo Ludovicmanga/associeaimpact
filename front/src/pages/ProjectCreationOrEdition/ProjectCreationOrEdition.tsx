@@ -9,13 +9,14 @@ import {
   Select,
   Skeleton,
   TextField,
+  useMediaQuery,
 } from "@mui/material";
 import NavBar from "../../components/NavBar/NavBar";
 import SideBar from "../../components/SideBar/SideBar";
 import styles from "./ProjectCreationOrEdition.module.css";
 import { useEffect, useState } from "react";
 import { FaClock, FaFire, FaRegQuestionCircle } from "react-icons/fa";
-import { Add } from "@mui/icons-material";
+import { Add, Delete, Save } from "@mui/icons-material";
 import AddPartnerModal from "../../components/AddPartnerModal/AddPartnerModal";
 import {
   createProjectApiCall,
@@ -67,27 +68,78 @@ export default function ProjectCreationOrEdition(props: {
       description: string;
     }[]
   >([]);
+  const [nameInputError, setNameInputError] = useState(false);
+  const [nameInputErrorHelperText, setNameInputErrorHelperText] = useState("");
+  const [descriptionInputError, setDescriptionInputError] = useState(false);
+  const [descriptionInputErrorHelperText, setDescriptionInputErrorHelperText] =
+    useState("");
+  const [placeInputError, setPlaceInputError] = useState(false);
+  const [placeInputErrorErrorHelperText, setPlaceInputErrorErrorHelperText] =
+    useState("");
+  const [founderRoleInputError, setFounderRoleInputError] = useState(false);
+  const [founderRoleInputErrorHelperText, setFounderRoleInputErrorHelperText] =
+    useState("");
 
   const handleCreateProject = async () => {
-    const createdProject = await createProjectApiCall({
-      name,
-      state,
-      stakes,
-      founderRole,
-      description,
-      place,
-      partnersWanted,
-    });
-    if (createdProject) {
-      navigate("/");
-      dispatch(
-        setSnackBar({
-          isOpen: true,
-          severity: "success",
-          message: "Votre projet a bien été créé",
-        })
-      );
+    if (name.length === 0) {
+      setNameInputError(true);
+      setNameInputErrorHelperText("Vous devez entrer un nom de projet");
+      setTimeout(() => {
+        setNameInputError(false);
+      }, 2000);
     }
+
+    if (description.length < 30) {
+      setDescriptionInputError(true);
+      setDescriptionInputErrorHelperText(
+        "Vous devez entrer au moins 30 caractères"
+      );
+      setTimeout(() => {
+        setDescriptionInputError(false);
+      }, 2000);
+    }
+
+    if (founderRole.length === 0) {
+      setFounderRoleInputError(true);
+      setFounderRoleInputErrorHelperText("Entrez votre rôle dans le projet");
+      setTimeout(() => {
+        setFounderRoleInputError(false);
+      }, 2000);
+    }
+
+    if (!place) {
+      setPlaceInputError(true);
+      setPlaceInputErrorErrorHelperText("Entrez un lieu");
+      setTimeout(() => {
+        setPlaceInputError(false);
+      }, 2000);
+    }
+
+    if (validateCreationIsPossible()) {
+      const createdProject = await createProjectApiCall({
+        name,
+        state,
+        stakes,
+        founderRole,
+        description,
+        place,
+        partnersWanted,
+      });
+      if (createdProject) {
+        navigate("/");
+        dispatch(
+          setSnackBar({
+            isOpen: true,
+            severity: "success",
+            message: "Votre projet a bien été créé",
+          })
+        );
+      }
+    }
+  };
+
+  const validateCreationIsPossible = () => {
+    return !!name && description.length > 29 && !!founderRole && !!place;
   };
 
   const handleEditProject = async () => {
@@ -156,183 +208,213 @@ export default function ProjectCreationOrEdition(props: {
     setIsLoading(false);
   }, []);
 
+  const bigScreen = useMediaQuery("(min-width: 40rem)");
+
+  useEffect(() => {
+    console.log(bigScreen, " is the bigs");
+  }, [bigScreen]);
+
   return (
     <div className={styles.container}>
-      <div className={styles.sidebarContainer}>
-        <SideBar />
-      </div>
+      <SideBar />
       <div className={styles.mainContentWithNavBar}>
         <NavBar />
-        <Paper
-          elevation={7}
-          sx={{
-            margin: "2rem 6rem",
-          }}
-        >
-          {isLoading ? (
-            <Skeleton />
-          ) : (
-            <div className={styles.mainContent}>
-              <div className={styles.questionContainer}>
-                <div className={styles.questionTitle}>Nom du projet</div>
-                <TextField
-                  placeholder="Ex: Carbone 4"
-                  fullWidth
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </div>
-              <div className={styles.questionContainer}>
-                <div className={styles.questionTitle}>
-                  Description du projet
+        <div className={styles.mainContent}>
+          <Paper
+            elevation={7}
+            sx={{
+              width: bigScreen ? "50%" : "100%",
+              padding: "2rem",
+              borderRadius: "20px",
+            }}
+          >
+            {isLoading ? (
+              <Skeleton />
+            ) : (
+              <div>
+                <div className={styles.questionContainer}>
+                  <div className={styles.inputLabel}>Nom du projet</div>
+                  <TextField
+                    error={nameInputError}
+                    placeholder="Ex: Carbone 4"
+                    fullWidth
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    helperText={nameInputError ? nameInputErrorHelperText : ""}
+                  />
                 </div>
-                <TextField
-                  multiline
-                  placeholder="Ex: Carbone 4 est une entreprise de conseil en énergie et décarbonation"
-                  fullWidth
-                  minRows={5}
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
-              </div>
-              <div className={styles.questionContainer}>
-                <div className={styles.questionTitle}>Lieu du projet</div>
-                <APIProvider
-                  apiKey={API_KEY}
-                  solutionChannel="GMP_devsite_samples_v3_rgmautocomplete"
-                >
-                  <PlaceAutocomplete onPlaceSelect={setPlace} />
-                </APIProvider>
-              </div>
-              <div className={styles.questionContainer}>
-                <div className={styles.questionTitle}>Etat du projet</div>
-                <FormControl fullWidth>
-                  <Select
-                    value={state}
-                    label="Age"
-                    onChange={(e) => setState(e.target.value as ProjectState)}
+                <div className={styles.questionContainer}>
+                  <div className={styles.inputLabel}>Description du projet</div>
+                  <TextField
+                    multiline
+                    placeholder="Ex: Carbone 4 est une entreprise de conseil en énergie et décarbonation"
+                    fullWidth
+                    minRows={5}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    error={descriptionInputError}
+                    helperText={
+                      descriptionInputError
+                        ? descriptionInputErrorHelperText
+                        : ""
+                    }
+                  />
+                </div>
+                <div className={styles.questionContainer}>
+                  <div className={styles.inputLabel}>Lieu du projet</div>
+                  <APIProvider
+                    apiKey={API_KEY}
+                    solutionChannel="GMP_devsite_samples_v3_rgmautocomplete"
                   >
-                    <MenuItem value={ProjectState.idea}>
-                      <div className={styles.projectStateItem}>
-                        <FaRegQuestionCircle color="#f59f00" />
-                        <div className={styles.projectStateItemText}>Idée</div>
-                      </div>
-                    </MenuItem>
-                    <MenuItem value={ProjectState.recentlyLaunched}>
-                      <div className={styles.projectStateItem}>
-                        <FaClock color="#f59f00" />
-                        <div className={styles.projectStateItemText}>
-                          Lancement récent
-                        </div>
-                      </div>
-                    </MenuItem>
-                    <MenuItem value={ProjectState.commercialSuccess}>
-                      <div className={styles.projectStateItem}>
-                        <FaFire color="#f59f00" />
-                        <div className={styles.projectStateItemText}>
-                          Succès commercial
-                        </div>
-                      </div>
-                    </MenuItem>
-                  </Select>
-                </FormControl>
-              </div>
-              <div className={styles.questionContainer}>
-                <div className={styles.questionTitle}>
-                  Votre poste dans l'entreprise
-                </div>
-                <TextField
-                  value={founderRole}
-                  onChange={(e) => setFounderRole(e.target.value)}
-                  placeholder="Ex: CEO"
-                  fullWidth
-                />
-              </div>
-              <div className={styles.questionContainer}>
-                <div className={styles.questionTitle}>Enjeux traités</div>
-                <Autocomplete
-                  disablePortal
-                  options={stakesList}
-                  renderInput={(params) => (
-                    <TextField placeholder="Ex: Agriculture" {...params} />
-                  )}
-                  multiple
-                  onChange={(e, values) => setStakes(values)}
-                  value={stakes}
-                />
-              </div>
-              <div className={styles.questionContainer}>
-                <div className={styles.questionTitle}>
-                  Votre recherche d'associés
-                </div>
-                <div>
-                  {partnersWanted.map((partner) => (
-                    <Chip
-                      className={styles.cofounderChip}
-                      label={partner.role}
-                      onDelete={() =>
-                        setPartnersWanted((curr) =>
-                          curr.filter((p) => p.id !== partner.id)
-                        )
-                      }
+                    <PlaceAutocomplete
+                      placeInputError={placeInputError}
+                      placeInputErrorHelperText={placeInputErrorErrorHelperText}
+                      onPlaceSelect={setPlace}
                     />
-                  ))}
+                  </APIProvider>
                 </div>
-                <Button onClick={() => setAddPartnerModalOpen(true)}>
-                  <Add />
-                  {partnersWanted.length === 0
-                    ? "Ajouter"
-                    : "Ajouter un nouvel associé recherché"}
-                </Button>
-              </div>
-              <div
-                className={
-                  props.mode === "creation"
-                    ? `${styles.submitBtnContainer} ${styles.submitBtnContainerCreationMode}`
-                    : `${styles.submitBtnContainer} ${styles.submitBtnContainerEditionMode}`
-                }
-              >
-                {props.mode === "creation" ? (
-                  <Button
-                    onClick={handleCreateProject}
-                    color="primary"
-                    size="large"
-                    variant="contained"
-                    sx={{
-                      width: "40%",
-                    }}
-                  >
-                    Créer le projet
+                <div className={styles.questionContainer}>
+                  <div className={styles.inputLabel}>Etat du projet</div>
+                  <FormControl fullWidth>
+                    <Select
+                      value={state}
+                      label="Age"
+                      onChange={(e) => setState(e.target.value as ProjectState)}
+                    >
+                      <MenuItem value={ProjectState.idea}>
+                        <div className={styles.projectStateItem}>
+                          <FaRegQuestionCircle color="#f59f00" />
+                          <div className={styles.projectStateItemText}>
+                            Idée
+                          </div>
+                        </div>
+                      </MenuItem>
+                      <MenuItem value={ProjectState.recentlyLaunched}>
+                        <div className={styles.projectStateItem}>
+                          <FaClock color="#f59f00" />
+                          <div className={styles.projectStateItemText}>
+                            Lancement récent
+                          </div>
+                        </div>
+                      </MenuItem>
+                      <MenuItem value={ProjectState.commercialSuccess}>
+                        <div className={styles.projectStateItem}>
+                          <FaFire color="#f59f00" />
+                          <div className={styles.projectStateItemText}>
+                            Succès commercial
+                          </div>
+                        </div>
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+                <div className={styles.questionContainer}>
+                  <div className={styles.inputLabel}>
+                    Votre poste dans l'entreprise
+                  </div>
+                  <TextField
+                    value={founderRole}
+                    onChange={(e) => setFounderRole(e.target.value)}
+                    placeholder="Ex: CEO"
+                    fullWidth
+                    error={founderRoleInputError}
+                    helperText={
+                      founderRoleInputError
+                        ? founderRoleInputErrorHelperText
+                        : ""
+                    }
+                  />
+                </div>
+                <div className={styles.questionContainer}>
+                  <div className={styles.inputLabel}>
+                    Enjeux traités (max 3)
+                  </div>
+                  <Autocomplete
+                    disablePortal
+                    options={stakesList}
+                    renderInput={(params) => (
+                      <TextField placeholder="Ex: Agriculture" {...params} />
+                    )}
+                    multiple
+                    onChange={(e, values) => setStakes(values)}
+                    value={stakes}
+                    getOptionDisabled={(options) =>
+                      stakes.length > 2 ? true : false
+                    }
+                  />
+                </div>
+                <div className={styles.questionContainer}>
+                  <div className={styles.inputLabel}>
+                    Votre recherche d'associés
+                  </div>
+                  <div>
+                    {partnersWanted.map((partner) => (
+                      <Chip
+                        sx={{
+                          margin: "0.3rem",
+                        }}
+                        label={partner.role}
+                        onDelete={() =>
+                          setPartnersWanted((curr) =>
+                            curr.filter((p) => p.id !== partner.id)
+                          )
+                        }
+                      />
+                    ))}
+                  </div>
+                  <Button onClick={() => setAddPartnerModalOpen(true)}>
+                    <Add />
+                    Ajouter
                   </Button>
-                ) : (
-                  <>
+                </div>
+                <div
+                  className={
+                    props.mode === "creation"
+                      ? `${styles.submitBtnContainer} ${styles.submitBtnContainerCreationMode}`
+                      : `${styles.submitBtnContainer} ${styles.submitBtnContainerEditionMode}`
+                  }
+                >
+                  {props.mode === "creation" ? (
                     <Button
-                      onClick={handleEditProject}
+                      onClick={handleCreateProject}
                       size="large"
                       variant="contained"
                       sx={{
-                        margin: "0 1rem",
+                        width: bigScreen ? "40%" : "80%",
                       }}
                     >
-                      Enregistrer
+                      Créer le projet
                     </Button>
-                    <Button
-                      onClick={handleDeleteProject}
-                      color="error"
-                      size="large"
-                      variant="outlined"
-                      sx={{
-                        margin: "0 1rem",
-                      }}
-                    >
-                      Supprimer le projet
-                    </Button>
-                  </>
-                )}
+                  ) : (
+                    <>
+                      <Button
+                        onClick={handleEditProject}
+                        size="large"
+                        variant="contained"
+                        sx={{
+                          margin: "0 1rem",
+                        }}
+                      >
+                        {bigScreen ? "Enregistrer" : <Save />}
+                      </Button>
+                      <Button
+                        onClick={handleDeleteProject}
+                        color="error"
+                        size="large"
+                        variant="outlined"
+                        sx={{
+                          margin: "0 1rem",
+                        }}
+                      >
+                        {bigScreen ? " Supprimer le projet" : <Delete />}
+                      </Button>
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
-          )}
-        </Paper>
+            )}
+          </Paper>
+        </div>
       </div>
       <AddPartnerModal
         isOpen={addPartnerModalOpen}

@@ -5,9 +5,14 @@ import {
   Chip,
   Icon,
   IconButton,
+  useMediaQuery,
 } from "@mui/material";
 import styles from "./ProjectBox.module.css";
-import { getFormattedDayMonthYear, handleGetTime } from "../../utils/utils";
+import {
+  getFormattedDayMonthYear,
+  handleGetCreationDate,
+  handleGetTime,
+} from "../../utils/utils";
 import { Edit, EditOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
@@ -20,20 +25,18 @@ const ProjectBox = (props: {
   isEditable: boolean;
 }) => {
   const navigate = useNavigate();
-  const handleGetCreationDate = () => {
-    const createdAtDate = new Date(props.createdAt);
-    const creationDate = getFormattedDayMonthYear(createdAtDate);
-    if (creationDate === "aujourd'hui") {
-      return creationDate;
-    } else {
-      return `le ${creationDate}`;
-    }
-  };
+  const bigScreen = useMediaQuery("(min-width: 40rem)");
 
   return (
-    <Card className={styles.container}>
+    <Card
+      className={styles.container}
+      sx={{
+        borderRadius: "30px",
+        padding: "1rem",
+      }}
+    >
       <CardContent className={styles.cardContent}>
-        <div>
+        <div className={styles.mainContent}>
           <div className={styles.titleContainer}>
             <div className={styles.titleText}>{props.name}</div>
             {props.isEditable && (
@@ -47,23 +50,27 @@ const ProjectBox = (props: {
               </IconButton>
             )}
           </div>
-          <div className={styles.topicsRow}>
-            {props.stakes.map((stake) => (
-              <Chip
-                label={stake}
-                className={styles.topicChip}
-                sx={{
-                  background: "#e6fcf5",
-                }}
-              />
-            ))}
-          </div>
           <div className={styles.description}>
             {props.description.substring(0, 300)}...
           </div>
+          {bigScreen && (
+            <div className={styles.topicsRow}>
+              {props.stakes.map((stake) => (
+                <Chip
+                  key={stake}
+                  label={stake}
+                  className={styles.topicChip}
+                  sx={{
+                    background: "#e6fcf5",
+                    fontSize: bigScreen ? "0.7rem" : "0.6rem",
+                  }}
+                />
+              ))}
+            </div>
+          )}
         </div>
         <div className={styles.creationDate}>
-          Posté {handleGetCreationDate()}
+          Posté {handleGetCreationDate(props.createdAt)}
         </div>
       </CardContent>
     </Card>

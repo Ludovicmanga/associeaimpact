@@ -30,4 +30,10 @@ export type Conversation = {
     interlocutorName: string;
     unreadCount: number;
     preview: string;
-} 
+}
+
+export type Partner = {
+    id: string;
+    role: string;
+    description: string;
+  }

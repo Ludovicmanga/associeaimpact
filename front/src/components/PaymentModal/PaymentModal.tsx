@@ -10,23 +10,25 @@ import styles from "./PaymentModal.module.css";
 
 const stripePromise = loadStripe("pk_test_z5x89OfwkEg8eXOJNMx384xK00KNJoz6oP");
 
-export default function PaymentModal(props: {
+export const PaymentModal = (props: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-}) {
+}) => {
   const handleClose = () => props.setIsOpen(false);
 
   return (
     <Modal open={props.isOpen} onClose={handleClose}>
-      <ModalContent />
+      <div>
+        <ModalContent />
+      </div>
     </Modal>
   );
-}
+};
 
-function ModalContent() {
+const ModalContent = () => {
   const fetchClientSecret = useCallback(async () => {
     const res = await axios(
-      "http://localhost:8080/stripe/create-checkout-session",
+      "http://localhost:8080/api/stripe/create-checkout-session",
       {
         method: "post",
         withCredentials: true,
@@ -46,4 +48,6 @@ function ModalContent() {
       </div>
     </div>
   );
-}
+};
+
+export default PaymentModal;

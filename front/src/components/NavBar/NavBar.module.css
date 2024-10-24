@@ -1,10 +1,16 @@
 .container {
   display: flex;
-  align-items: center;
-  justify-content: end;
+  align-items: start;
   padding: 1rem;
-  background: #e5dbff;
-  height: 8vh;
+  height: 14vh;
+}
+
+.containerWithStartElement {
+  justify-content: space-between;
+}
+
+.containerWithoutStartElement {
+  justify-content: end;
 }
 
 .logoContainer {
@@ -22,7 +28,7 @@
 
 .btnsContainer {
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: space-between;
 }
 

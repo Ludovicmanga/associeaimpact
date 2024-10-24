@@ -14,9 +14,12 @@ import { Project } from "../../types/types";
 import NoResultInfo from "../../components/NoResultInfo/NoResultInfo";
 import noResultImgPath from "../../images/undraw_feeling_blue.svg";
 import noSearchImgPath from "../../images/noSearchFound.svg";
+import WelcomeMessage from "../../components/WelcomeMessage/WelcomeMessage";
+import { useAppSelector } from "../../redux/hooks";
 
 const ProjectsList = (props: { mode: "all projects" | "my projects" }) => {
   const navigate = useNavigate();
+  const loggedUserState = useAppSelector((state) => state.user);
 
   const [isLoading, setIsLoading] = useState(true);
   const [allProjects, setAllProjects] = useState<Project[]>([]);
@@ -31,7 +34,6 @@ const ProjectsList = (props: { mode: "all projects" | "my projects" }) => {
     } else {
       projectsToSet = await getProjectsCreatedByLoggedUserApiCall();
     }
-    console.log(projectsToSet, " are the projects");
     if (projectsToSet.length === 0) {
       setNoResultText("Aucun projet n'a été créé");
       setNoResultImg(noResultImgPath);
@@ -54,11 +56,24 @@ const ProjectsList = (props: { mode: "all projects" | "my projects" }) => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.sidebarContainer}>
-        <SideBar />
-      </div>
+      <SideBar />
       <div className={styles.mainContent}>
-        <NavBar />
+        <NavBar
+          startElement={
+            <WelcomeMessage
+              mainText={
+                loggedUserState
+                  ? `Bonjour ${loggedUserState?.name}`
+                  : "Bienvenue sur Associé à impact"
+              }
+              subText={
+                loggedUserState
+                  ? "Ravis de vous revoir !"
+                  : "L'endroit pour trouver son associé"
+              }
+            />
+          }
+        />
         {isLoading ? (
           <ProjectsListSkeleton />
         ) : (

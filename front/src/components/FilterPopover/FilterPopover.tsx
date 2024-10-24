@@ -11,45 +11,12 @@ import { Clear, HideSource, Search } from "@mui/icons-material";
 import UiverseCheckBox from "../UiverseCheckBox/UiverseCheckBox";
 import { Filter } from "../../types/types";
 
-const allFilters: Filter[] = [
-  {
-    id: "1",
-    type: "city",
-    value: "Paris",
-  },
-  {
-    id: "2",
-    type: "city",
-    value: "Washington",
-  },
-  {
-    id: "3",
-    type: "city",
-    value: "Sidney",
-  },
-  {
-    id: "4",
-    type: "stake",
-    value: "Agriculture",
-  },
-  {
-    id: "5",
-    type: "stake",
-    value: "Energie",
-  },
-  {
-    id: "6",
-    type: "stake",
-    value: "Social",
-  },
-];
-
 export default function FilterPopover(props: {
+  allFilters: Filter[];
   activeFilters: Filter[];
   setActiveFilters: Dispatch<React.SetStateAction<Filter[]>>;
 }) {
   const [searchInputValue, setSearchInputValue] = useState("");
-
   const [selectableFiltersToDisplay, setSelectableFiltersToDisplay] = useState<
     {
       id: string;
@@ -65,14 +32,14 @@ export default function FilterPopover(props: {
   useEffect(() => {
     if (selectedFilterType === "city") {
       setSelectableFiltersToDisplay((curr) =>
-        allFilters.filter((filt) => filt.type === "city")
+        props.allFilters.filter((filt) => filt.type === "city")
       );
     } else {
       setSelectableFiltersToDisplay(
-        allFilters.filter((filt) => filt.type === "stake")
+        props.allFilters.filter((filt) => filt.type === "stake")
       );
     }
-  }, [allFilters, selectedFilterType]);
+  }, [props.allFilters, selectedFilterType]);
 
   useEffect(() => {
     setSearchInputValue("");
@@ -80,7 +47,7 @@ export default function FilterPopover(props: {
 
   useEffect(() => {
     setSelectableFiltersToDisplay((curr) =>
-      allFilters
+      props.allFilters
         .filter((filt) => filt.value.includes(searchInputValue))
         .filter((filt) =>
           selectedFilterType === "city"
@@ -88,7 +55,7 @@ export default function FilterPopover(props: {
             : filt.type === "stake"
         )
     );
-  }, [searchInputValue, allFilters]);
+  }, [searchInputValue, props.allFilters]);
 
   return (
     <div className={styles.container}>
@@ -199,7 +166,7 @@ export default function FilterPopover(props: {
                       activeFilters={props.activeFilters}
                       onChange={(isChecked: boolean) => {
                         if (isChecked) {
-                          const foundFilter = allFilters.find(
+                          const foundFilter = props.allFilters.find(
                             (filter) => filter.id === filt.id
                           );
                           if (foundFilter) {

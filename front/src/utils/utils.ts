@@ -28,3 +28,13 @@ export const getFormattedDayMonthYear = (date: Date) => {
 export function haveCommonElements(array1: string[], array2: string[]) {
     return array1.some(item => array2.includes(item));
 }
+
+export const handleGetCreationDate = (timestamp: Date) => {
+    const createdAtDate = new Date(timestamp);
+    const creationDate = getFormattedDayMonthYear(createdAtDate);
+    if (creationDate === "aujourd'hui") {
+      return creationDate;
+    } else {
+      return `le ${creationDate}`;
+    }
+  };

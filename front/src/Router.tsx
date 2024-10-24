@@ -15,6 +15,7 @@ import ProjectCreation from "./pages/ProjectCreationOrEdition/ProjectCreationOrE
 import Messages from "./pages/Messages/Messages";
 import StripeReturnPage from "./components/StripeReturnPage/StripeReturnPage";
 import { setSnackBar } from "./redux/snackbarSlice";
+import MyProfile from "./pages/MyProfile/MyProfile";
 
 const routesWhenLoggedIn = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ const routesWhenLoggedIn = createBrowserRouter([
     element: <Messages />,
   },
   {
+    path: "/profile",
+    element: <MyProfile />,
+  },
+  {
     path: "/my-projects",
     element: <ProjectsList mode="my projects" />,
   },
@@ -61,16 +66,24 @@ const routesWhenLoggedIn = createBrowserRouter([
 
 const routesWhenLoggedOut = createBrowserRouter([
   {
+    path: "/",
+    element: <ProjectsList mode="all projects" />,
+  },
+  {
+    path: "project-details/:id",
+    element: <ProjectDetail />,
+  },
+  {
     path: "/login",
     element: <Auth mode="login" />,
   },
   {
-    path: "/sign-up ",
+    path: "/sign-up",
     element: <Auth mode="signUp" />,
   },
   {
     path: "/*",
-    element: <Navigate to="/login" />,
+    element: <Navigate to="/" />,
   },
 ]);
 
