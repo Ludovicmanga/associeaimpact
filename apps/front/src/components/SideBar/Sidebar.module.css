@@ -1,0 +1,39 @@
+.drawerContainer {
+  padding: 1rem 0.5rem;
+  height: 100vh;
+}
+
+.logoContainer {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.pagesListContainer {
+  margin: 0 0 0 0;
+}
+
+.listItemBtn {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+  color: #495057;
+}
+
+.listItemIcon {
+  display: flex;
+  align-items: center;
+}
+
+.listText {
+  margin: 0 0 0 1rem;
+}
+
+@media screen and (min-width: 40rem) {
+  .container {
+    width: 20%;
+  }
+}

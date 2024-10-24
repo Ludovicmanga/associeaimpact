@@ -1,0 +1,14 @@
+.container {
+  padding: 1rem;
+}
+
+.mainMessage {
+  font-weight: 600;
+  font-size: 1.3rem;
+}
+
+.subMessage {
+  margin: 0.3rem 0 0 0;
+  color: #f1f3f5;
+  font-weight: 600;
+}

@@ -1,0 +1,37 @@
+.container {
+  display: flex;
+  align-items: start;
+  padding: 1rem;
+  height: 14vh;
+}
+
+.containerWithStartElement {
+  justify-content: space-between;
+}
+
+.containerWithoutStartElement {
+  justify-content: end;
+}
+
+.logoContainer {
+  display: flex;
+  margin: 0 0 0 1rem;
+}
+
+.logoText {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0 0 0 0.7rem;
+}
+
+.btnsContainer {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+}
+
+.subscribeBtn {
+  margin: 0 0 0 1rem;
+}
