@@ -6,5 +6,5 @@
       "start": "cd back && npm run start:prod",
       "build": "cd back && npm install && npm run build"
     },
-    "dependencies": {}
+    "dependencies": {} 
   }
