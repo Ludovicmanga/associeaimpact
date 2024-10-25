@@ -1,7 +1,7 @@
 {
     "name": "name",
     "scripts": {
-        "build": "cd apps/back && npm run build:all",
+        "build": "cd apps/back && npm run build",
         "start": "cd apps/back && npm start"
     }
 }
