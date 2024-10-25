@@ -1,0 +1,1 @@
+export const messageReceivedTemplateId = "d-a4c900777528462bb28228b44a8ea081"

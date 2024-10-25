@@ -1,5 +1,7 @@
 {
+    "name": "name",
     "scripts": {
-        "postinstall": "npm install --prefix back && npm install --prefix front"
+        "build": "cd apps/back && npm run build:all",
+        "start": "cd apps/back && npm start"
     }
-  }
+}
