@@ -1,5 +1,6 @@
 {
     "scripts": {
-      "start": "cd back && npm start"
+      "start": "cd back && npm start",
+      "build": "cd back && npm run build"
     }
   }
