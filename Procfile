@@ -1,1 +1,1 @@
-web: cd back && npm run start:prod
+web: cd back && npm run build && npm run start:prod
