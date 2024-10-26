@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "npx prisma generate && npx @nestjs/cli build && npm run build:frontend",
+    "build": "npx prisma generate && npx prisma migrate deploy && npx @nestjs/cli build && npm run build:frontend",
     "build:frontend": "cd ../front && npm install && npm run build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "npx @nestjs/cli start",
