@@ -3,5 +3,8 @@
     "scripts": {
         "build": "cd apps/back && npm run build",
         "start": "cd apps/back && npm start"
-    }
+    },
+    "engines": {
+    "node": "20.12.2"
+  }
 }
