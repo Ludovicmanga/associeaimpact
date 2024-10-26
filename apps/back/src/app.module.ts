@@ -18,7 +18,7 @@ import { join } from 'path';
 
 @Module({
   imports: [ServeStaticModule.forRoot({
-    rootPath: join(__dirname, '..', '..', 'front', 'public'), // Chemin où se trouveront les fichiers de React
+    rootPath: join(__dirname, '..', 'front', 'public'),
   }),
   AuthModule, UsersModule, PrismaModule, ProjectsModule, MessagesModule, ConversationsModule, StripeModule],
   controllers: [AppController, ProjectsController, ConversationsController],
