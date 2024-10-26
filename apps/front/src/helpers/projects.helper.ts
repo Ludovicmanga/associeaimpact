@@ -14,10 +14,8 @@ export const createProjectApiCall = async (data: {
         description: string;
     }[];
 }) => {
-    console.log('before res')
-
      const res = await axios({
-        url: 'http://localhost:8080/api/projects/create',
+        url: `${process.env.REACT_APP_BACKEND_URL}/api/projects/create`,
         method: 'post',
         withCredentials: true,
         data
@@ -40,7 +38,7 @@ export const editProjectApiCall = async (data: {
     }[];
 }) => {
      const res = await axios({
-        url: 'http://localhost:8080/api/projects/edit',
+        url: `${process.env.REACT_APP_BACKEND_URL}/api/projects/edit`,
         method: 'patch',
         withCredentials: true,
         data
@@ -50,7 +48,7 @@ export const editProjectApiCall = async (data: {
 
 export const deleteProjectApiCall = async (id: number) => {
     const res = await axios({
-        url: 'http://localhost:8080/api/projects/delete/' + id,
+        url: `${process.env.REACT_APP_BACKEND_URL}/api/projects/delete/${id}`,
         method: 'delete',
         withCredentials: true,
     })
@@ -59,7 +57,7 @@ export const deleteProjectApiCall = async (id: number) => {
 
 export const getAllProjectsApiCall = async () => {
     const res = await axios({
-        url: 'http://localhost:8080/api/projects/get-all',
+        url: `${process.env.REACT_APP_BACKEND_URL}/api/projects/get-all`,
         method: 'get',
         withCredentials: true,
     })
@@ -68,7 +66,7 @@ export const getAllProjectsApiCall = async () => {
 
 export const getProjectsCreatedByLoggedUserApiCall = async () => {
     const res = await axios({
-        url: 'http://localhost:8080/api/projects/get-created-by-logged-user',
+        url: `${process.env.REACT_APP_BACKEND_URL}/api/projects/get-created-by-logged-user`,
         method: 'get',
         withCredentials: true,
     })
@@ -77,7 +75,7 @@ export const getProjectsCreatedByLoggedUserApiCall = async () => {
 
 export const getOneProjectApiCall = async (id: number) => {
     const res = await axios({
-        url: 'http://localhost:8080/api/projects/get/' + id,
+        url: `${process.env.REACT_APP_BACKEND_URL}/api/projects/get/${id}`,
         method: 'get',
         withCredentials: true,
     })

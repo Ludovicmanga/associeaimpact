@@ -5,6 +5,9 @@
         "start": "cd apps/back && npm start"
     },
     "engines": {
-    "node": "20.12.2"
-  }
+        "node": "20.12.2"
+    },
+    "dependencies": {
+        "@types/uuid": "^10.0.0"
+    }
 }

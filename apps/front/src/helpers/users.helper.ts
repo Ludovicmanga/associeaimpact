@@ -6,7 +6,7 @@ export const editUserApiCall = async (data: {
     name: string
 }) => {
     const res = await axios({
-        url: 'http://localhost:8080/api/users',
+        url: `${process.env.REACT_APP_BACKEND_URL}/api/users`,
         method: 'patch',
         withCredentials: true,
         data
