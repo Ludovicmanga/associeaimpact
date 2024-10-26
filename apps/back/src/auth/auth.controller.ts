@@ -5,7 +5,6 @@ import { LocalAuthGuard } from './local-auth.guard';
 import { OAuth2Client } from 'google-auth-library';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { EntrepreneurialExperience } from 'src/types/enums';
-import { error } from 'console';
 
 @Controller('auth')
 export class AuthController {
@@ -29,8 +28,7 @@ export class AuthController {
       } catch(e) {
         console.log(e)
       }
-    }
-    
+    } 
 
     @UseGuards(LocalAuthGuard)
     @Post('login')
@@ -38,7 +36,7 @@ export class AuthController {
       try {
         const token = await this.authService.login(req.user);
         if (token) {
-          res.cookie('tai_user_token',token.access_token, { maxAge: 3600000, httpOnly: true });
+          res.cookie('tai_user_token', token.access_token, { maxAge: 3600000, httpOnly: true });
           res.send(req.user);
         }
       } catch (e) {
