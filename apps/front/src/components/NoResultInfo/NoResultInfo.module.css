@@ -1,6 +1,7 @@
 .textContainer {
   display: flex;
   justify-content: center;
-  font-size: 1.7rem;
+  font-size: 1.4rem;
   color: #868e96;
+  margin: 0.6rem 0 0 0;
 }
