@@ -30,7 +30,6 @@ export class AuthController {
         console.log(e)
       }
     }
-    
 
     @UseGuards(LocalAuthGuard)
     @Post('login')

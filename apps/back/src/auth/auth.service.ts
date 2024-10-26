@@ -4,11 +4,13 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { EntrepreneurialExperience } from 'src/types/enums';
 
+
 @Injectable()
 export class AuthService {
   constructor(private usersService: UsersService, private jwtService: JwtService, private prismaService: PrismaService) {}
 
   async validateUser(email: string, pass: string): Promise<any> {
+    console.log('why ????')
     const user = await this.usersService.findOneByEmail(email);
     if (user && user.password === pass) {
       const { password, ...result } = user;
