@@ -5,29 +5,17 @@ import { setSnackBar } from "../redux/snackbarSlice";
 import { EntrepreneurialExperience } from "../types/enums";
 
 export const loginWithLocal = async (email: string, password: string, dispatch: Dispatch) => {
-    try {
-        const res = await axios({
-            url: `${process.env.REACT_APP_BACKEND_URL}/api/auth/login`,
-            method: 'post',
-            withCredentials: true,
-            data: {
-                email,
-                password
-            }
-        })
-        return res.data;
-    } catch(e) {
-        if (e instanceof AxiosError) {
-            if (e.status === 401) {
-                dispatch(setSnackBar({
-                    isOpen: true,
-                    severity: "error",
-                    message: 'Whoops ! Email ou identifiants incorrects'
-                }))
-            }
+    const res = await axios({
+        url: `${process.env.REACT_APP_BACKEND_URL}/api/auth/login`,
+        method: 'post',
+        withCredentials: true,
+        data: {
+            email,
+            password
         }
-        console.log(e, ' is the error !!!')
-    }
+    })
+    return res.data;
+
 }
 
 export const signUpWithLocalApiCall = async (email: string, password: string, name: string, entrepreneurialExperience: EntrepreneurialExperience, dispatch: Dispatch) => {

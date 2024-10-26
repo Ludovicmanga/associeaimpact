@@ -3,6 +3,7 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { EntrepreneurialExperience } from 'src/types/enums';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -10,9 +11,12 @@ export class AuthService {
 
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.usersService.findOneByEmail(email);
-    if (user && user.password === pass) {
-      const { password, ...result } = user;
-      return result;
+    if (user) {
+      const isMatch = await bcrypt.compare(pass, user?.password);
+      if (isMatch) {
+        const { password, ...result } = user;
+        return result;
+      }
     }
     return null;
   }
@@ -25,11 +29,14 @@ export class AuthService {
   }
 
   async signUp(args: { email: string, password: string, name: string, entrepreneurialExperience: EntrepreneurialExperience }) {
+    const saltOrRounds = 10;
+    const hash = await bcrypt.hash(args.password, saltOrRounds);
+
     const createdUser = await this.prismaService.user.create({
       data: {
         email: args.email,
         name: args.name,
-        password: args.password,
+        password: hash,
         entrepreneurialExperience: args.entrepreneurialExperience || EntrepreneurialExperience.neverFounder,
         isPaying: false
       }
