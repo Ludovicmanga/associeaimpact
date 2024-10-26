@@ -18,7 +18,7 @@ import { join } from 'path';
 
 @Module({
   imports: [ServeStaticModule.forRoot({
-    rootPath: join(__dirname, '..', '..', 'front', 'public'),
+    rootPath: join(__dirname, '..', '..', 'front', 'build'),
   }),
   AuthModule, UsersModule, PrismaModule, ProjectsModule, MessagesModule, ConversationsModule, StripeModule],
   controllers: [AppController, ProjectsController, ConversationsController],
