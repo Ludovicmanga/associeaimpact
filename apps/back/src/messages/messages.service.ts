@@ -118,7 +118,7 @@ export class MessagesService {
             dynamic_template_data: {
                 interlocutor_name: interlocutor.name,
                 message_preview: message.substring(0, 10) + '...',
-                conversation_link: `http://localhost:3000/messages/${interlocutor.id}`
+                conversation_link: `${process.env.FRONTEND_URL}/messages/${interlocutor.id}`
             }
           }
           

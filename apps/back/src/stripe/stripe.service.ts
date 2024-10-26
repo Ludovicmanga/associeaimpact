@@ -17,7 +17,7 @@ export class StripeService {
               },
             ],
             mode: 'payment',
-            return_url: `http://localhost:3000/return?session_id={CHECKOUT_SESSION_ID}`,
+            return_url: `${process.env.FRONTEND_URL}/return?session_id={CHECKOUT_SESSION_ID}`,
           });
     }
 
