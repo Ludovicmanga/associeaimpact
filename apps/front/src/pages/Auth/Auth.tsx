@@ -25,6 +25,7 @@ import logo from "../../images/logo.svg";
 import { EntrepreneurialExperience } from "../../types/enums";
 import { setSnackBar } from "../../redux/snackbarSlice";
 import { error } from "console";
+import { AxiosError } from "axios";
 
 const Auth = (props: { mode: "login" | "signUp" }) => {
   const dispatch = useAppDispatch();
@@ -84,8 +85,7 @@ const Auth = (props: { mode: "login" | "signUp" }) => {
 
     if (props.mode === "login" && email.length > 0 && password.length > 0) {
       if (validateLoginInputs()) {
-        const res = await loginWithLocal(email, password, dispatch);
-        dispatch(setUser(res));
+        await handleLoginLocal();
       }
     } else {
       if (validateSignupInputs()) {
@@ -136,6 +136,26 @@ const Auth = (props: { mode: "login" | "signUp" }) => {
       const res = await loginWithGoogleApiCall(credentialResponse.credential);
       dispatch(setUser(res));
       navigate("/");
+    }
+  };
+
+  const handleLoginLocal = async () => {
+    try {
+      const res = await loginWithLocal(email, password, dispatch);
+      dispatch(setUser(res));
+      navigate("/");
+    } catch (e) {
+      if (e instanceof AxiosError) {
+        if (e.status === 401) {
+          dispatch(
+            setSnackBar({
+              isOpen: true,
+              severity: "error",
+              message: "Whoops ! Email ou identifiants incorrects",
+            })
+          );
+        }
+      }
     }
   };
 
