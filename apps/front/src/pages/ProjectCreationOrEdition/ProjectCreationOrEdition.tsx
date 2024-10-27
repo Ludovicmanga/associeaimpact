@@ -210,10 +210,6 @@ export default function ProjectCreationOrEdition(props: {
 
   const bigScreen = useMediaQuery("(min-width: 40rem)");
 
-  useEffect(() => {
-    console.log(bigScreen, " is the bigs");
-  }, [bigScreen]);
-
   return (
     <div className={styles.container}>
       <SideBar />
