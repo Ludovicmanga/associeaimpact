@@ -28,7 +28,7 @@ export class AuthController {
       } catch(e) {
         console.log(e)
       }
-    } 
+    }
 
     @UseGuards(LocalAuthGuard)
     @Post('login')
