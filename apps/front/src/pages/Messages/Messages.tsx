@@ -111,9 +111,6 @@ export default function Messages() {
       }
     }
     setConversations(allUserConversations);
-    /* if (!selectedConvId && allUserConversations[0]?.id) {
-      setSelectedConvId(allUserConversations[0].id);
-    } */
   };
 
   useEffect(() => {
