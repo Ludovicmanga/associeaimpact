@@ -28,11 +28,7 @@ export class AuthController {
       } catch(e) {
         console.log(e)
       }
-<<<<<<< HEAD
     }
-=======
-    } 
->>>>>>> 5986033cd (added)
 
     @UseGuards(LocalAuthGuard)
     @Post('login')

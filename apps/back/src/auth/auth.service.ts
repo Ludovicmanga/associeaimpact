@@ -5,7 +5,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { EntrepreneurialExperience } from 'src/types/enums';
 import * as bcrypt from 'bcrypt';
 
-
 @Injectable()
 export class AuthService {
   constructor(private usersService: UsersService, private jwtService: JwtService, private prismaService: PrismaService) {}
