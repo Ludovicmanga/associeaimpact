@@ -1,20 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
-import { createRoot } from "react-dom/client";
 import {
   APIProvider,
-  ControlPosition,
-  MapControl,
   AdvancedMarker,
   Map,
   useMap,
   useMapsLibrary,
   useAdvancedMarkerRef,
-  AdvancedMarkerRef,
 } from "@vis.gl/react-google-maps";
 import styles from "./GoogleMapsApi.module.css";
 import { TextField } from "@mui/material";
-
-const API_KEY = "AIzaSyDXxLmTjy7fb0p_I7YgZELDDGgRFzpJjZw";
 
 export default function GoogleMapsAPI(props: {
   selectedPlace: google.maps.places.PlaceResult | null;
@@ -25,7 +19,7 @@ export default function GoogleMapsAPI(props: {
 
   return (
     <APIProvider
-      apiKey={API_KEY}
+      apiKey={process.env.REACT_APP_API_KEY!}
       solutionChannel="GMP_devsite_samples_v3_rgmautocomplete"
     >
       <Map

@@ -8,7 +8,7 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
   app.enableCors({
-    origin: [process.env.FRONTEND_URL],
+    origin: ['http://localhost:3000', 'https://associeimpact.fr', 'https://www.associeimpact.fr', 'associeimpact.fr'],
     credentials: true
   });
   app.use(cookieParser());
