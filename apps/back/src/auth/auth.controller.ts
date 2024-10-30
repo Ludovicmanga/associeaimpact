@@ -18,7 +18,7 @@ export class AuthController {
           await this.authService.sendVerificationEmail(email);
           const response = await this.authService.signUp({ email, password, name, entrepreneurialExperience });
           if (response.token) {
-            res.cookie('tai_user_token',response.token.access_token, { maxAge: 3600000, httpOnly: true, secure: true, sameSite: 'none',  });
+            res.cookie('tai_user_token',response.token.access_token, { maxAge: 3600000, httpOnly: true, secure: true, sameSite: 'none' });
             res.send(response.user);
           }
         } catch(e) {
