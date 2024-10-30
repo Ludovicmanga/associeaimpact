@@ -4,6 +4,11 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { EntrepreneurialExperience } from 'src/types/enums';
 import * as bcrypt from 'bcrypt';
+import { encryptText } from 'src/utils/utils';
+import { MailService } from '@sendgrid/mail';
+
+const sgMail = new MailService();
+sgMail.setApiKey(process.env.SENDGRID_API_KEY || '')
 
 @Injectable()
 export class AuthService {
@@ -38,7 +43,8 @@ export class AuthService {
         name: args.name,
         password: hash,
         entrepreneurialExperience: args.entrepreneurialExperience || EntrepreneurialExperience.neverFounder,
-        isPaying: false
+        isPaying: false,
+        isEmailVerified: false
       }
     })
 
@@ -47,6 +53,9 @@ export class AuthService {
         user: createdUser
       }
     }
+  }
 
+  async sendVerificationEmail(email: string) {    
+   //const sentMessage = await sgMail.send(msg);
   }
 }

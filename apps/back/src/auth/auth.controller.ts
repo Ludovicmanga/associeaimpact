@@ -15,9 +15,10 @@ export class AuthController {
       try {
         const { email, password, name, entrepreneurialExperience } = req.body;
         try {
+          await this.authService.sendVerificationEmail(email);
           const response = await this.authService.signUp({ email, password, name, entrepreneurialExperience });
           if (response.token) {
-            res.cookie('tai_user_token',response.token.access_token, { maxAge: 3600000, httpOnly: true });
+            res.cookie('tai_user_token',response.token.access_token, { maxAge: 3600000, httpOnly: true, secure: true, sameSite: 'none',  });
             res.send(response.user);
           }
         } catch(e) {
@@ -36,7 +37,7 @@ export class AuthController {
       try {
         const token = await this.authService.login(req.user);
         if (token) {
-          res.cookie('tai_user_token', token.access_token, { maxAge: 3600000, httpOnly: true });
+          res.cookie('tai_user_token', token.access_token, { maxAge: 3600000, httpOnly: true, secure: true, sameSite: 'none',  });
           res.send(req.user);
         }
       } catch (e) {
@@ -73,14 +74,15 @@ export class AuthController {
             name: ticket.getPayload().given_name,
             password: Math.random().toString(36).substr(2),
             entrepreneurialExperience: EntrepreneurialExperience.neverFounder,
-            isPaying: false
+            isPaying: false,
+            isEmailVerified: true
           },
           update: {}
         });
         if (foundUser) {
            const token = await this.authService.login(foundUser);
           if (token) {
-            res.cookie('tai_user_token',token.access_token, { maxAge: 3600000, httpOnly: true });
+            res.cookie('tai_user_token',token.access_token, { maxAge: 3600000, httpOnly: true, secure: true, sameSite: 'none',  });;
             res.send(foundUser);
           }  
         }
@@ -93,6 +95,15 @@ export class AuthController {
     async checkUserIsLoggedIn(@Request() req, @Response() res) {
       try {
         res.send(req.user);
+      } catch(e) {
+        console.log(e, ' is the error !!')
+      }
+    }
+
+    @Post('verifiy-email')
+    async verifyEmail(@Request() req, @Response() res) {
+      try {
+        const isVerified = await this.authService
       } catch(e) {
         console.log(e, ' is the error !!')
       }

@@ -23,6 +23,7 @@ model User {
   conversationsAsFirstSender   Conversation[] @relation("conversation_first_sender")
   conversationsAsFirstReceiver Conversation[] @relation("conversation_first_receiver")
   isPaying                     Boolean
+  isEmailVerified              Boolean
 }
 
 model Project {
