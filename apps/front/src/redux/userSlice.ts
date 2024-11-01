@@ -3,6 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import { EntrepreneurialExperience } from '../types/enums';
 
 type UserType = {
+  id: number;
   email: string,
   name: string,
   entrepreneurialExperience: EntrepreneurialExperience
