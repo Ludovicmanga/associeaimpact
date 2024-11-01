@@ -5,6 +5,9 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import App from "./Router";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
+import { Crisp } from "crisp-sdk-web";
+
+Crisp.configure("82ba4699-244a-4e65-bcb0-8bbd2485d08b");
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

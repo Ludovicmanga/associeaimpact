@@ -223,6 +223,7 @@ export const ProjectDetail = () => {
                   size="medium"
                   color="primary"
                   onClick={handleGoToMessages}
+                  disabled={founder?.id === loggedUserState?.id}
                 >
                   <FaMessage className={styles.contactBtnIcon} />
                   Contacter {founder?.name}
