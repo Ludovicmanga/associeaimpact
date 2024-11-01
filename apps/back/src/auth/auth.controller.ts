@@ -1,31 +1,44 @@
-import { Controller, Get, Post, Request, Response, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Post, Request, Response, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { LocalAuthGuard } from './local-auth.guard';
 import { OAuth2Client } from 'google-auth-library';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { EntrepreneurialExperience } from 'src/types/enums';
+import { UsersService } from 'src/users/users.service';
 
 @Controller('auth')
 export class AuthController {
-    constructor(private authService: AuthService, private prismaService: PrismaService) {}
+    constructor(private authService: AuthService, private prismaService: PrismaService, private usersService: UsersService) {}
+
+    @Post('verify-email')
+    async verifyEmail(@Request() req, @Response() res) {
+      try {
+          const { token } = req.body;
+          const response = await this.authService.verifyEmail(token);
+          if (response.token) {
+            res.cookie('tai_user_token',response.token.access_token, { maxAge: 3600000, httpOnly: true, secure: true, sameSite: 'none' });
+            res.send(response.user);
+          }
+       } catch(e) {
+         console.log(e)
+       }
+    }
 
     @Post('sign-up')
     async signUp(@Request() req, @Response() res) {
       try {
         const { email, password, name, entrepreneurialExperience } = req.body;
-        try {
-          await this.authService.sendVerificationEmail(email);
-          const response = await this.authService.signUp({ email, password, name, entrepreneurialExperience });
-          if (response.token) {
-            res.cookie('tai_user_token',response.token.access_token, { maxAge: 3600000, httpOnly: true, secure: true, sameSite: 'none' });
-            res.send(response.user);
+          const foundUser = await this.usersService.findOneByEmail(email);
+          if (foundUser) {
+            res.send({
+              error: 'USER_ALREADY_EXISTS'
+            })
+          } else {
+            const sent = await this.authService.sendVerificationEmail({ email, password, name, entrepreneurialExperience });
+            res.send(sent);
           }
-        } catch(e) {
-          res.send({
-            error: 'USER_ALREADY_EXISTS'
-          })
-        }
+
       } catch(e) {
         console.log(e)
       }
@@ -75,7 +88,6 @@ export class AuthController {
             password: Math.random().toString(36).substr(2),
             entrepreneurialExperience: EntrepreneurialExperience.neverFounder,
             isPaying: false,
-            isEmailVerified: true
           },
           update: {}
         });
@@ -95,15 +107,6 @@ export class AuthController {
     async checkUserIsLoggedIn(@Request() req, @Response() res) {
       try {
         res.send(req.user);
-      } catch(e) {
-        console.log(e, ' is the error !!')
-      }
-    }
-
-    @Post('verifiy-email')
-    async verifyEmail(@Request() req, @Response() res) {
-      try {
-        const isVerified = await this.authService
       } catch(e) {
         console.log(e, ' is the error !!')
       }

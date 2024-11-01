@@ -16,6 +16,7 @@ import Messages from "./pages/Messages/Messages";
 import StripeReturnPage from "./components/StripeReturnPage/StripeReturnPage";
 import { setSnackBar } from "./redux/snackbarSlice";
 import MyProfile from "./pages/MyProfile/MyProfile";
+import { VerifyEmail } from "./pages/VerifyEmail/VerifyEmail";
 
 const routesWhenLoggedIn = createBrowserRouter([
   {
@@ -80,6 +81,10 @@ const routesWhenLoggedOut = createBrowserRouter([
   {
     path: "/sign-up",
     element: <Auth mode="signUp" />,
+  },
+  {
+    path: "/verify-email",
+    element: <VerifyEmail />,
   },
   {
     path: "/*",

@@ -107,13 +107,11 @@ const Auth = (props: { mode: "login" | "signUp" }) => {
             );
           }
         } else {
-          dispatch(setUser(res));
-          navigate("/");
           dispatch(
             setSnackBar({
               isOpen: true,
               severity: "success",
-              message: "Votre compte a bien été créé !",
+              message: "Vous avez reçu un email pour vérifier votre compte !",
             })
           );
         }

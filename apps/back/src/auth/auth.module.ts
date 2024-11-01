@@ -7,6 +7,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { AuthController } from './auth.controller';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { LocalStrategy } from './local.strategy';
+import { UsersService } from 'src/users/users.service';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { LocalStrategy } from './local.strategy';
       signOptions: { expiresIn: '3600s' },
     }),
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy, PrismaService],
+  providers: [AuthService, LocalStrategy, JwtStrategy, PrismaService, UsersService],
   exports: [AuthService],
   controllers: [AuthController],
 })
