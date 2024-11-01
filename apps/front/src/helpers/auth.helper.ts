@@ -79,5 +79,23 @@ export const logoutApiCall = async () => {
             withCredentials: true,
         })
         return res;
-    } catch(e) {}
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+export const verifyUserEmailApiCall = async (token: string) => {
+    try {
+        const res = await axios({
+            url: `${process.env.REACT_APP_BACKEND_URL}/api/auth/verify-email`,
+            method: 'post',
+            withCredentials: true,
+            data: {
+                token
+            }
+        });
+        return res.data;
+    } catch(e) {
+        console.log(e);
+    }
 }

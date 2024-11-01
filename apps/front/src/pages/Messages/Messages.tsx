@@ -36,7 +36,8 @@ import { Search, West } from "@mui/icons-material";
 import NoSelectedMessage from "../../components/NoSelectedMessage/NoSelectedMessage";
 
 export default function Messages() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [messagesListLoading, setMessagesListLoading] = useState(true);
+  const [messagesPreviewsLoading, setMessagesPreviewsLoading] = useState(true);
   const [paymentModalIsOpen, setPaymentModalIsOpen] = useState(false);
   const params = useParams();
   const interlocutorIdFromParams = parseInt(params.id!);
@@ -70,7 +71,7 @@ export default function Messages() {
         );
         handleGetActiveConversationMessage(selectedConvId);
       }
-      setIsLoading(false);
+      setMessagesListLoading(false);
     }
   };
 
@@ -93,8 +94,6 @@ export default function Messages() {
   };
 
   const handleGetAllConversations = async () => {
-    const allUserConversations = await getAllUserConversations();
-
     if (interlocutorIdFromParams) {
       const conversationBetweenUserAndInterlocutor =
         await getConversationBetweenUserAndInterlocutor(
@@ -110,17 +109,19 @@ export default function Messages() {
         }
       }
     }
+    const allUserConversations = await getAllUserConversations();
     setConversations(allUserConversations);
   };
 
   useEffect(() => {
     handleGetAllConversations();
-    setIsLoading(false);
+    setMessagesPreviewsLoading(false);
+    setMessagesListLoading(false);
   }, []);
 
   useEffect(() => {
     if (selectedConvId) {
-      setIsLoading(true);
+      setMessagesListLoading(true);
       checkIfUserHasAccessToConv();
       handleScrollToBottom();
     }
@@ -146,7 +147,7 @@ export default function Messages() {
   };
 
   const handleCreateMessage = async (content: string) => {
-    setIsLoading(true);
+    setMessagesListLoading(true);
     const createdMessage = await createMessage({
       content,
       conversationId: selectedConvId!,
@@ -156,7 +157,7 @@ export default function Messages() {
       setMessageBeingTyped("");
       handleScrollToBottom();
     }
-    setIsLoading(false);
+    setMessagesListLoading(false);
   };
 
   return (
@@ -189,119 +190,117 @@ export default function Messages() {
           </div>
         )}
         <div className={styles.mainContent}>
-          {conversations.length === 0 ? (
-            <div className={styles.noResultInfoContainer}>
-              <NoResultInfo
-                text="Vous n'avez pas de messages"
-                img={noMessagesImg}
-              />
-            </div>
-          ) : (
-            <>
-              <div
-                className={
-                  selectedConvId
-                    ? styles.messagePreviewsContainerWhenAMessageSelected
-                    : styles.messagePreviewsContainerWhenNoMessageSelected
-                }
-              >
-                {isLoading ? (
-                  <MessagePreviewBoxSkeleton />
-                ) : (
-                  <>
-                    <div className={styles.searchMessageInputContainer}>
-                      <OutlinedInput
-                        value={searchMessageInput}
-                        onChange={(e) => setSearchMessageInput(e.target.value)}
-                        placeholder="Rechercher"
-                        fullWidth
-                        size="small"
-                        className={styles.filterBtn}
-                        startAdornment={
-                          <InputAdornment position="start">
-                            <Search />
-                          </InputAdornment>
-                        }
-                      />
-                    </div>
-                    {filteredConversations.map((conv) => (
-                      <div
-                        onClick={() => setSelectedConvId(conv.id)}
-                        key={conv.id}
-                      >
-                        <MessagePreviewBox
-                          selected={conv.id === selectedConvId}
-                          name={conv.interlocutorName}
-                          preview={conv.preview}
-                          unreadCount={conv.unreadCount}
-                        />
-                      </div>
-                    ))}
-                  </>
-                )}
-              </div>
-              <div
-                className={
-                  selectedConvId
-                    ? styles.messagesSectionContainerWhenAMessageSelected
-                    : styles.messagesSectionContainerWhenNoMessageSelected
-                }
-              >
-                <div className={styles.messagesBoxesSection}>
-                  {isLoading ? (
-                    <MessageBoxSectionSkeleton />
-                  ) : !selectedConvId ? (
-                    <NoSelectedMessage />
-                  ) : selectedConvId && !hasAccessToConv ? (
-                    <NoAccessMessage
-                      subscribeBtnAction={handleOpenPaymentModal}
-                      senderName={
-                        conversations.find((conv) => conv.id === selectedConvId)
-                          ?.interlocutorName || ""
+          <>
+            <div
+              className={
+                selectedConvId
+                  ? styles.messagePreviewsContainerWhenAMessageSelected
+                  : styles.messagePreviewsContainerWhenNoMessageSelected
+              }
+            >
+              {messagesPreviewsLoading ? (
+                <MessagePreviewBoxSkeleton />
+              ) : conversations.length === 0 ? (
+                <div className={styles.noResultInfoContainer}>
+                  <NoResultInfo
+                    text="Vous n'avez pas de messages"
+                    img={noMessagesImg}
+                  />
+                </div>
+              ) : (
+                <>
+                  <div className={styles.searchMessageInputContainer}>
+                    <OutlinedInput
+                      value={searchMessageInput}
+                      onChange={(e) => setSearchMessageInput(e.target.value)}
+                      placeholder="Rechercher"
+                      fullWidth
+                      size="small"
+                      className={styles.filterBtn}
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <Search />
+                        </InputAdornment>
                       }
                     />
-                  ) : (
-                    <div>
-                      {messagesFromActiveConversation.map((mess) => (
-                        <MessageBox
-                          key={mess.id}
-                          type={mess.type}
-                          message={mess.content}
-                          time={handleGetTime(mess.createdAt)}
-                        />
-                      ))}
-                      <div ref={endMessageDiv}></div>
+                  </div>
+                  {filteredConversations.map((conv) => (
+                    <div
+                      onClick={() => setSelectedConvId(conv.id)}
+                      key={conv.id}
+                    >
+                      <MessagePreviewBox
+                        selected={conv.id === selectedConvId}
+                        name={conv.interlocutorName}
+                        preview={conv.preview}
+                        unreadCount={conv.unreadCount}
+                      />
                     </div>
-                  )}
-                </div>
-                <div className={styles.messageFieldContainer}>
-                  {isLoading ? (
-                    <Skeleton height={50} />
-                  ) : hasAccessToConv ? (
-                    <TextField
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          handleCreateMessage(messageBeingTyped);
-                        }
-                      }}
-                      value={messageBeingTyped}
-                      onChange={(e) => setMessageBeingTyped(e.target.value)}
-                      placeholder="Ex: Bonjour, et si on se rencontrait ?"
-                      size="small"
-                      fullWidth
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          background: "white",
-                        },
-                      }}
-                    />
-                  ) : (
-                    <div></div>
-                  )}
-                </div>
+                  ))}
+                </>
+              )}
+            </div>
+            <div
+              className={
+                selectedConvId
+                  ? styles.messagesSectionContainerWhenAMessageSelected
+                  : styles.messagesSectionContainerWhenNoMessageSelected
+              }
+            >
+              <div className={styles.messagesBoxesSection}>
+                {messagesListLoading ? (
+                  <MessageBoxSectionSkeleton />
+                ) : !selectedConvId ? (
+                  <NoSelectedMessage />
+                ) : selectedConvId && !hasAccessToConv ? (
+                  <NoAccessMessage
+                    subscribeBtnAction={handleOpenPaymentModal}
+                    senderName={
+                      conversations.find((conv) => conv.id === selectedConvId)
+                        ?.interlocutorName || ""
+                    }
+                  />
+                ) : (
+                  <div>
+                    {messagesFromActiveConversation.map((mess) => (
+                      <MessageBox
+                        key={mess.id}
+                        type={mess.type}
+                        message={mess.content}
+                        time={handleGetTime(mess.createdAt)}
+                      />
+                    ))}
+                    <div ref={endMessageDiv}></div>
+                  </div>
+                )}
               </div>
-            </>
-          )}
+              <div className={styles.messageFieldContainer}>
+                {messagesListLoading ? (
+                  <Skeleton height={50} />
+                ) : hasAccessToConv ? (
+                  <TextField
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        handleCreateMessage(messageBeingTyped);
+                      }
+                    }}
+                    value={messageBeingTyped}
+                    onChange={(e) => setMessageBeingTyped(e.target.value)}
+                    placeholder="Ex: Bonjour, et si on se rencontrait ?"
+                    size="small"
+                    fullWidth
+                    sx={{
+                      "& .MuiInputBase-root": {
+                        backgroundColor: "white",
+                      },
+                    }}
+                  />
+                ) : (
+                  <div></div>
+                )}
+              </div>
+            </div>
+          </>
         </div>
       </div>
       <PaymentModal
