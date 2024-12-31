@@ -1,5 +1,7 @@
 import {
   Avatar,
+  Button,
+  Fab,
   IconButton,
   InputAdornment,
   OutlinedInput,
@@ -264,23 +266,39 @@ export default function Messages() {
                 {messagesListLoading ? (
                   <Skeleton height={50} />
                 ) : (
-                  <TextField
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" && messageBeingTyped) {
-                        handleCreateMessage(messageBeingTyped);
-                      }
-                    }}
-                    value={messageBeingTyped}
-                    onChange={(e) => setMessageBeingTyped(e.target.value)}
-                    placeholder="Ex: Bonjour, et si on se rencontrait ?"
-                    size="small"
-                    fullWidth
-                    sx={{
-                      "& .MuiInputBase-root": {
-                        backgroundColor: "white",
-                      },
-                    }}
-                  />
+                  <div className={styles.messageTextFieldContainer}>
+                    <TextField
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && messageBeingTyped) {
+                          handleCreateMessage(messageBeingTyped);
+                        }
+                      }}
+                      value={messageBeingTyped}
+                      onChange={(e) => setMessageBeingTyped(e.target.value)}
+                      placeholder="Ex: Bonjour, et si on se rencontrait ?"
+                      size="small"
+                      fullWidth
+                      sx={{
+                        "& .MuiInputBase-root": {
+                          backgroundColor: "white",
+                        },
+                        margin: "0 1rem 0 0",
+                      }}
+                    />
+                    <Fab
+                      variant="extended"
+                      size="medium"
+                      color="primary"
+                      onClick={(e) => {
+                        if (messageBeingTyped) {
+                          handleCreateMessage(messageBeingTyped);
+                        }
+                      }}
+                      sx={{}}
+                    >
+                      Envoyer
+                    </Fab>
+                  </div>
                 )}
               </div>
             </div>
