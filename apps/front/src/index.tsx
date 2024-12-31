@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import App from "./Router";
+import App from "./Router/Router";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
 import { Crisp } from "crisp-sdk-web";

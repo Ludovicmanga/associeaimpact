@@ -87,7 +87,8 @@ export const stakesList = [
   "Transports maritimes et aériens durables",
   "Carburants alternatifs (hydrogène, biogaz)",
   "Logistique verte et optimisation des flux",
-  "Infrastructures de recharge pour véhicules électriques"
+  "Infrastructures de recharge pour véhicules électriques",
+  "autre"
 ]
 
 export const biggestFrenchCities = [
