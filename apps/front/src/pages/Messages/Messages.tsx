@@ -46,7 +46,6 @@ export default function Messages() {
   const [filteredConversations, setFilteredConversations] = useState<
     Conversation[]
   >([]);
-  const [hasAccessToConv, setHasAccessToConv] = useState(false);
   const [searchMessageInput, setSearchMessageInput] = useState("");
   const endMessageDiv = useRef<HTMLDivElement | null>(null);
 
@@ -247,14 +246,6 @@ export default function Messages() {
                   <MessageBoxSectionSkeleton />
                 ) : !selectedConvId ? (
                   <NoSelectedMessage />
-                ) : selectedConvId && !hasAccessToConv ? (
-                  <NoAccessMessage
-                    subscribeBtnAction={handleOpenPaymentModal}
-                    senderName={
-                      conversations.find((conv) => conv.id === selectedConvId)
-                        ?.interlocutorName || ""
-                    }
-                  />
                 ) : (
                   <div>
                     {messagesFromActiveConversation.map((mess) => (
@@ -272,10 +263,10 @@ export default function Messages() {
               <div className={styles.messageFieldContainer}>
                 {messagesListLoading ? (
                   <Skeleton height={50} />
-                ) : hasAccessToConv ? (
+                ) : (
                   <TextField
                     onKeyDown={(e) => {
-                      if (e.key === "Enter") {
+                      if (e.key === "Enter" && messageBeingTyped) {
                         handleCreateMessage(messageBeingTyped);
                       }
                     }}
@@ -290,8 +281,6 @@ export default function Messages() {
                       },
                     }}
                   />
-                ) : (
-                  <div></div>
                 )}
               </div>
             </div>

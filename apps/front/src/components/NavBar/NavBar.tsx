@@ -1,4 +1,4 @@
-import { Button, IconButton, useMediaQuery } from "@mui/material";
+import { Button, Fab, IconButton, useMediaQuery } from "@mui/material";
 import styles from "./NavBar.module.css";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
@@ -64,15 +64,17 @@ const NavBar = (props: { startElement?: ReactNode }) => {
         <div className={styles.btnsContainer}>
           {loggedUser ? (
             <div className={styles.subscribeBtn}>
-              <Button
+              <Fab
+                variant="extended"
+                size="medium"
+                color="primary"
                 onClick={handleLogout}
-                variant="contained"
                 sx={{
                   background: "#495057",
                 }}
               >
                 Se déconnecter
-              </Button>
+              </Fab>
             </div>
           ) : (
             <>
@@ -80,15 +82,17 @@ const NavBar = (props: { startElement?: ReactNode }) => {
                 <Button onClick={handleGoLoginPage}>Se connecter</Button>
               </div>
               <div className={styles.subscribeBtn}>
-                <Button
+                <Fab
+                  variant="extended"
+                  size="medium"
+                  color="primary"
                   onClick={handleGoSignUpPage}
-                  variant="contained"
                   sx={{
                     background: "#495057",
                   }}
                 >
                   Inscription
-                </Button>
+                </Fab>
               </div>
             </>
           )}

@@ -135,7 +135,7 @@ export const ProjectDetail = () => {
               sx={{
                 overflow: "scroll",
                 maxHeight: "25rem",
-                borderRadius: "25px",
+                borderRadius: "10px",
               }}
             >
               <div className={styles.cardTitle}>
@@ -151,7 +151,7 @@ export const ProjectDetail = () => {
             <Card
               className={styles.contentCard}
               sx={{
-                borderRadius: "25px",
+                borderRadius: "10px",
               }}
             >
               <div className={styles.cardTitle}>
@@ -167,7 +167,7 @@ export const ProjectDetail = () => {
             <Card
               className={styles.contentCard}
               sx={{
-                borderRadius: "25px",
+                borderRadius: "10px",
               }}
             >
               <div className={styles.cardTitle}>
@@ -181,7 +181,7 @@ export const ProjectDetail = () => {
             <Card
               className={styles.contentCard}
               sx={{
-                borderRadius: "25px",
+                borderRadius: "10px",
               }}
             >
               <div className={styles.cardTitle}>
@@ -237,7 +237,7 @@ export const ProjectDetail = () => {
               sx={{
                 overflow: "scroll",
                 maxHeight: "25rem",
-                borderRadius: "25px",
+                borderRadius: "10px",
               }}
             >
               <div className={styles.cardTitle}>
@@ -271,7 +271,7 @@ export const ProjectDetail = () => {
               sx={{
                 overflow: "scroll",
                 maxHeight: "25rem",
-                borderRadius: "25px",
+                borderRadius: "10px",
               }}
             >
               <div className={styles.cardTitle}>

@@ -10,7 +10,7 @@ export default function MessagePreviewBox(props: {
   return (
     <ListItemButton
       sx={{
-        background: props.selected ? "#adb5bd" : "",
+        background: props.selected ? "#ffe8cc" : "",
         padding: 0,
         margin: 0,
       }}

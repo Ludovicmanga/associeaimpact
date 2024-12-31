@@ -134,6 +134,13 @@ export const FiltersRow = (props: {
         </div>
         {searchBtnIsClicked ? (
           <OutlinedInput
+            sx={{
+              "&.Mui-focused": {
+                "& .MuiOutlinedInput-notchedOutline": {
+                  border: "solid 1px #adb5bd",
+                },
+              },
+            }}
             value={searchInputValue}
             onChange={(e) => setSearchInputValue(e.target.value)}
             size="small"

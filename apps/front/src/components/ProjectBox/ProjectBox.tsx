@@ -1,18 +1,12 @@
 import {
   Card,
   CardContent,
-  CardMedia,
   Chip,
-  Icon,
   IconButton,
   useMediaQuery,
 } from "@mui/material";
 import styles from "./ProjectBox.module.css";
-import {
-  getFormattedDayMonthYear,
-  handleGetCreationDate,
-  handleGetTime,
-} from "../../utils/utils";
+import { handleGetCreationDate } from "../../utils/utils";
 import { Edit, EditOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
@@ -31,7 +25,7 @@ const ProjectBox = (props: {
     <Card
       className={styles.container}
       sx={{
-        borderRadius: "30px",
+        borderRadius: "10px",
         padding: "1rem",
       }}
     >
@@ -51,7 +45,7 @@ const ProjectBox = (props: {
             )}
           </div>
           <div className={styles.description}>
-            {props.description.substring(0, 300)}...
+            {props.description.substring(0, 150)}...
           </div>
           {bigScreen && (
             <div className={styles.topicsRow}>
