@@ -77,5 +77,4 @@ export class ConversationsService {
         }
         return false;
     }
-
 }

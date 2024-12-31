@@ -21,7 +21,6 @@ import {
   getConversationMessages,
 } from "../../helpers/messages.helper";
 import {
-  checkUserHasAccessToConversation,
   createConversation,
   getAllUserConversations,
   getConversationBetweenUserAndInterlocutor,
@@ -53,24 +52,18 @@ export default function Messages() {
 
   const handleOpenPaymentModal = () => setPaymentModalIsOpen(true);
 
-  const checkIfUserHasAccessToConv = async () => {
+  const handleChangeSelectedConv = async () => {
     if (selectedConvId) {
-      const userHasAccessToConv = await checkUserHasAccessToConversation(
-        selectedConvId
+      setConversations((curr) =>
+        curr.map((conv) => {
+          if (conv.id === selectedConvId) {
+            return { ...conv, unreadCount: 0 };
+          } else {
+            return conv;
+          }
+        })
       );
-      setHasAccessToConv(userHasAccessToConv);
-      if (userHasAccessToConv) {
-        setConversations((curr) =>
-          curr.map((conv) => {
-            if (conv.id === selectedConvId) {
-              return { ...conv, unreadCount: 0 };
-            } else {
-              return conv;
-            }
-          })
-        );
-        handleGetActiveConversationMessage(selectedConvId);
-      }
+      handleGetActiveConversationMessages(selectedConvId);
       setMessagesListLoading(false);
     }
   };
@@ -122,7 +115,7 @@ export default function Messages() {
   useEffect(() => {
     if (selectedConvId) {
       setMessagesListLoading(true);
-      checkIfUserHasAccessToConv();
+      handleChangeSelectedConv();
       handleScrollToBottom();
     }
   }, [selectedConvId, endMessageDiv]);
@@ -141,7 +134,9 @@ export default function Messages() {
     }
   }, [searchMessageInput, conversations]);
 
-  const handleGetActiveConversationMessage = async (conversationId: number) => {
+  const handleGetActiveConversationMessages = async (
+    conversationId: number
+  ) => {
     const messages = await getConversationMessages(conversationId);
     setMessagesFromActiveConversation(messages);
   };
