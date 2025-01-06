@@ -31,7 +31,7 @@ export const createConversation = async (interlocutorId: number) => {
     return res.data; 
 }
 
-export const checkUserHasAccessToConversation = async (conversationId: number) => {
+/* export const checkUserHasAccessToConversation = async (conversationId: number) => {
     const res = await axios({
         url: `${process.env.REACT_APP_BACKEND_URL}/api/conversations/check-user-has-access/${conversationId}`,
         method: 'get',
@@ -39,3 +39,4 @@ export const checkUserHasAccessToConversation = async (conversationId: number) =
     })
     return res.data; 
 }
+ */
